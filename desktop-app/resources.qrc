@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/resources">
+        <file>images/info.png</file>
+        <file>images/setup.png</file>
+        <file>images/video-conference.png</file>
+    </qresource>
+</RCC>

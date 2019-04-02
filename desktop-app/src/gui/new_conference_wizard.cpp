@@ -26,6 +26,8 @@ bool NewConferenceWizard::requireConfigField(const YAML::Node & config, std::str
 
 void NewConferenceWizard::browseConfigFile() {
 
+    configLoaded = false;
+
     // Open config file
     QString configFile = QFileDialog::getOpenFileName(this,
     tr("Open configuration file for this meeting"), NULL, tr("iCT Meeting Config File (*.yaml)"));
@@ -78,6 +80,22 @@ void NewConferenceWizard::browseConfigFile() {
                                  .arg( QString::fromUtf8(new_conference.getClientName().c_str()));
     ui->conferenceConfigReview->setText(configConfirm);
 
+    configLoaded = true;
 
+}
 
+void NewConferenceWizard::done(int result) {
+    if (result) {
+        if (configLoaded) {
+            std::cout << "START STREAMING" << std::endl;
+            this->destroy();
+        } else {
+            QMessageBox::critical(
+                this, "Config Error",
+                "Please choose a configuration file."
+            );
+        }
+    } else {
+        this->destroy();
+    }
 }

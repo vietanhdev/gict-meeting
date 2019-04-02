@@ -29,7 +29,10 @@ public:
 private:
     Ui::NewConferenceWizard *ui;
 
+    bool configLoaded = false;
+
     bool requireConfigField(const YAML::Node & config, std::string config_field);
+    void done(int result);
 
 private slots:
     void browseConfigFile();

@@ -45,6 +45,7 @@ include_directories(
     "src/gui"
     "src/gui/framelesswindow"
     ${SDL2_INCLUDE_DIRS}
+    "src/yaml-cpp/include"
 )
 
 # add required source, header, ui and resource files
@@ -63,6 +64,9 @@ add_executable(${PROJECT_NAME}
     "src/gui/framelesswindow/framelesswindow.cpp"
     "src/gui/framelesswindow/windowdragger.cpp"
     "src/gui/framelesswindow/framelesswindow.ui"
+
+    "src/gui/new_conference_wizard.cpp"
+    "src/gui/new_conference_wizard.ui"
 )
 
 ADD_LIBRARY(
@@ -77,8 +81,14 @@ if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS 9)
     set (CPP_FS_LIB "stdc++fs")
 endif()
 
+# yaml-cpp library
+set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
+set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
+set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
+add_subdirectory(src/yaml-cpp)
+
 # link required libs
-target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp)
 
 # Copy files
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

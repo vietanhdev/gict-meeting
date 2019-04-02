@@ -1,3 +1,4 @@
+#include "new_conference_wizard.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -11,20 +12,18 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Connect buttons
     connect(ui->infoBtn, SIGNAL(released()), this, SLOT(showAboutBox()));
+    connect(ui->startStopBtn, SIGNAL(released()), this, SLOT(newConference()));
 
     // Option selector events
     connect(ui->cameraSelector, SIGNAL(activated(int)), this,
             SLOT(cameraSelector_activated()));
-
-    // Use space to capture
-    QShortcut *shortcut = new QShortcut(QKeySequence(Qt::Key_Space), this);
-    QObject::connect(shortcut, SIGNAL(activated()), this, SLOT(captureBtn_clicked()));
 
 
     refreshCams();
 
     // Init Audio
     SDL_Init(SDL_INIT_AUDIO);
+
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -49,6 +48,13 @@ void MainWindow::playShutter() {
 	// clean up
 	SDL_CloseAudioDevice(deviceId);
 	SDL_FreeWAV(wavBuffer);
+}
+
+
+
+void MainWindow::newConference() {
+    NewConferenceWizard *conf = new NewConferenceWizard;
+    conf->show();
 }
 
 

@@ -114,7 +114,7 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <widget class="QTextBrowser" name="textBrowser_2">
+   <widget class="QTextBrowser" name="conferenceConfigReview">
     <property name="geometry">
      <rect>
       <x>10</x>

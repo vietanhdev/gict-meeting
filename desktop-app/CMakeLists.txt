@@ -42,6 +42,8 @@ set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
 include_directories(
     "src"
+    "src/utilities"
+    "src/services"
     "src/gui"
     "src/gui/framelesswindow"
     ${SDL2_INCLUDE_DIRS}
@@ -51,12 +53,15 @@ include_directories(
 # add required source, header, ui and resource files
 add_executable(${PROJECT_NAME} 
     "src/main.cpp"
-    "src/utility.cpp"
-    "src/file_storage.cpp"
+
+    "src/utilities/utility.cpp"
+    "src/utilities/file_storage.cpp"
+    "src/utilities/timer.cpp"
+
     "src/gui/mainwindow.cpp"
     "src/gui/mainwindow.ui"
 
-    "src/timer.cpp"
+
     "resources.qrc"
     "src/gui/framelesswindow.qrc"
     "src/gui/darkstyle.qrc"
@@ -67,6 +72,9 @@ add_executable(${PROJECT_NAME}
 
     "src/gui/new_conference_wizard.cpp"
     "src/gui/new_conference_wizard.ui"
+
+    "src/services/conference.cpp"
+    "src/services/participant.cpp"
 )
 
 ADD_LIBRARY(
@@ -85,7 +93,7 @@ endif()
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "disable yaml tests")
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "disable yaml tools")
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
-add_subdirectory(src/yaml-cpp)
+add_subdirectory(src/yaml_cpp)
 
 # link required libs
 target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp)

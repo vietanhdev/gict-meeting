@@ -5,12 +5,11 @@
 std::vector<unsigned char> BasicProtocolData::packageData() const {
     std::vector<unsigned char> message = video_frame_.getJPEG();
 
-    // 4 dummy bytes
+    // 10 dummy bytes
     // May be used in the future for frame data
-    message.insert(message.begin(), 0);
-    message.insert(message.begin(), 0); 
-    message.insert(message.begin(), 0); 
-    message.insert(message.begin(), 0);
+    for (int i = 0; i < 10; ++i) {
+        message.insert(message.begin(), 0);
+    }
 
     // 4 bytes auth key
     int n = Conference::instance().getClientAuthKey();
@@ -35,7 +34,7 @@ std::vector<unsigned char> BasicProtocolData::packageData() const {
 bool BasicProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes) {
 
     // Corrupted package
-    if (raw_bytes.size() <= 6) {
+    if (raw_bytes.size() <= 16) {
         return false;
     }
 
@@ -48,7 +47,7 @@ bool BasicProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes)
     client_auth_key = (raw_bytes[2] << 24) + (raw_bytes[3] << 16) + (raw_bytes[4] << 8) + raw_bytes[5];
 
     // Extract frame data
-    std::vector<unsigned char>::const_iterator first = raw_bytes.begin() + 6;
+    std::vector<unsigned char>::const_iterator first = raw_bytes.begin() + 16;
     std::vector<unsigned char>::const_iterator last = raw_bytes.end();
     std::vector<unsigned char> video_frame_bytes(first, last);
 

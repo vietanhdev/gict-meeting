@@ -43,3 +43,7 @@ std::vector<unsigned char> VideoFrame::getJPEG() const {
     cv::imencode(kJPEGExtension, frame_image_, data_buffer, compression_params);
     return data_buffer;
 }
+
+cv::Mat VideoFrame::getImage() {
+    return frame_image_;
+}

@@ -13,6 +13,7 @@
 #include <errno.h>
 #include <atomic>
 #include <mutex>
+#include <opencv2/opencv.hpp>
 
 
 class Participant {
@@ -23,6 +24,7 @@ class Participant {
         unsigned char client_id;
         int auth_key;
         struct sockaddr_in client_addr;
+        cv::Mat image;
 
         bool connected = false; // Connected = true means client have connected to the system => client_addr has been set.
 
@@ -54,6 +56,16 @@ class Participant {
         struct sockaddr_in getClientAddress() {
             std::lock_guard<std::mutex> lock(g_mutex);
             return client_addr;
+        }
+
+        cv::Mat getImage() {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            return image.clone();
+        }
+
+        void setImage(const cv::Mat & img) {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            image = img.clone();
         }
 
         Participant(unsigned char client_id, std::string name, int auth_key);

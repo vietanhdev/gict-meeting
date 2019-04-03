@@ -58,7 +58,7 @@ bool Conference::checkAuth(unsigned char client_id, int auth_key) {
 }
 
 
-void Conference::updateClientAddress(unsigned char client_id, struct sockaddr_in client_addr) {
+void Conference::setClientAddress(unsigned char client_id, struct sockaddr_in client_addr) {
     for (int i = 0; i < participants.size(); ++i) {
         if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
             participants[i].setClientAddress(client_addr);
@@ -66,6 +66,16 @@ void Conference::updateClientAddress(unsigned char client_id, struct sockaddr_in
         } 
     }
 }
+
+void Conference::setImage(unsigned char client_id, const cv::Mat & img) {
+    for (int i = 0; i < participants.size(); ++i) {
+        if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
+            participants[i].setImage(img);
+            return;
+        } 
+    }
+}
+
 
 void Conference::setName(std::string name) {
     std::lock_guard<std::mutex> lock(global_mutex);

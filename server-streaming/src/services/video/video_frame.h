@@ -28,6 +28,8 @@ class VideoFrame {
     // compression to JPEG is also handled here to minimize the frame size.
     std::vector<unsigned char> getJPEG() const;
 
+    cv::Mat getImage();
+
    private:
     cv::Mat frame_image_;
 };

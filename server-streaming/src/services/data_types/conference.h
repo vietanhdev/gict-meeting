@@ -64,7 +64,10 @@ class Conference {
         bool checkAuth(unsigned char client_id, int auth_key);
 
         // Update client address of a participant
-        void updateClientAddress(unsigned char client_id, struct sockaddr_in client_addr);
+        void setClientAddress(unsigned char client_id, struct sockaddr_in client_addr);
+
+        // Update client image
+        void setImage(unsigned char client_id, const cv::Mat & img);
 
 };
 

@@ -30,6 +30,8 @@ void VideoStreamService::videoUpService() {
             std::vector<unsigned char> data;
             protocol_data.unpackData(socket.getPacket().data, data);
             VideoFrame video_frame(data);
+            conference.setImage(protocol_data.getClientId(), video_frame.getImage());
+
             video_frame.display();
         }
 
@@ -58,7 +60,7 @@ void VideoStreamService::videoDownService() {
         if (protocol_data.getMessage() == Message::REQUEST_IMAGE_STREAM) {
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
-                conference.updateClientAddress(protocol_data.getClientId(), socket.getPacket().client_addr);
+                conference.setClientAddress(protocol_data.getClientId(), socket.getPacket().client_addr);
             }
         }
 

@@ -40,20 +40,28 @@ void VideoStreamService::videoUpService() {
 
 void VideoStreamService::videoDownService() {
 
-    // Conference &conference = Conference::instance();
-    // const int port = conference.getVideoDownPort();
-    // const ReceiverSocket socket(port);
+   Conference &conference = Conference::instance();
+    const int port = conference.getVideoUpPort();
+    const ReceiverSocket socket(port);
 
-    // if (!socket.bindSocketToListen()) {
-    //     std::cerr << "Could not bind socket at port: " << conference.getVideoDownPort() << std::endl;
-    //     return;
-    // }
+    if (!socket.bindSocketToListen()) {
+        std::cerr << "Could not bind socket at port: " << conference.getVideoUpPort() << std::endl;
+        return;
+    }
 
-    // std::cout << "Listening on port " << port << "." << std::endl;
-    // VideoFrameProtocolData protocol_data;
-    // while (true) {
-    //     protocol_data.unpackData(socket.getPacket().data);
-    //     protocol_data.getImage().display();
-    // }
+    std::cout << "Listening on port " << port << "." << std::endl;
+    VideoFrameProtocolData protocol_data;
+    while (true) {
+        protocol_data.unpackHeader(socket.getPacket().data); 
+
+        // When client request image stream, update client address in participant
+        if (protocol_data.getMessage() == Message::REQUEST_IMAGE_STREAM) {
+            // Authentication
+            if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
+                conference.updateClientAddress(protocol_data.getClientId(), socket.getPacket().client_addr);
+            }
+        }
+
+    }
 
 }

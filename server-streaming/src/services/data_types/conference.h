@@ -6,6 +6,7 @@
 #include <mutex>
 #include <iostream>
 #include <cstdlib>
+#include <arpa/inet.h>
 
 #include "participant.h"
 #include "yaml-cpp/yaml.h"
@@ -30,17 +31,6 @@ class Conference {
     public:
         Conference();
         Conference(const Conference&);
-        Conference& operator=(const Conference& c) {
-            this->name = c.name;
-            this->secret_key = c.secret_key;
-            this->server_ip = c.server_ip;
-            this->video_up_port = c.video_up_port;
-            this->video_down_port = c.video_down_port;
-            this->audio_up_port = c.audio_up_port;
-            this->audio_down_port = c.audio_down_port;
-            this->participants = c.participants;
-            return *this;
-        }
 
         Conference(Conference &&) = delete;
         Conference & operator=(Conference &&) = delete;
@@ -72,6 +62,9 @@ class Conference {
         // Return true: correct id and auth_key
         // Otherwise, return false
         bool checkAuth(unsigned char client_id, int auth_key);
+
+        // Update client address of a participant
+        void updateClientAddress(unsigned char client_id, struct sockaddr_in client_addr);
 
 };
 

@@ -2,17 +2,6 @@
 
 Conference::Conference() {}
 
-Conference::Conference(const Conference& c) {
-    this->name = c.name;
-    this->secret_key = c.secret_key;
-    this->server_ip = c.server_ip;
-    this->video_up_port = c.video_up_port;
-    this->video_down_port = c.video_down_port;
-    this->audio_up_port = c.audio_up_port;
-    this->audio_down_port = c.audio_down_port;
-    this->participants = c.participants;
-}
-
 bool requireConfigField(const YAML::Node& config, std::string config_field) {
     if (!config[config_field]) {
         std::cout << "Wrong format configuration file - Missing:" + config_field
@@ -58,14 +47,24 @@ void Conference::readFromFile(std::string filepath) {
 // Check the auth_key of participants
 bool Conference::checkAuth(unsigned char client_id, int auth_key) {
     for (int i = 0; i < participants.size(); ++i) {
-        if (static_cast<int>(client_id) == static_cast<int>(participants[i].client_id)) {
-            if (auth_key == participants[i].auth_key) {
+        if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
+            if (auth_key == participants[i].getAuthKey()) {
                 return true;
             }
             break;
         } 
     }
     return false;
+}
+
+
+void Conference::updateClientAddress(unsigned char client_id, struct sockaddr_in client_addr) {
+    for (int i = 0; i < participants.size(); ++i) {
+        if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
+            participants[i].setClientAddress(client_addr);
+            return;
+        } 
+    }
 }
 
 void Conference::setName(std::string name) {

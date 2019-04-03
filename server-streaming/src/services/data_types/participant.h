@@ -11,14 +11,50 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <errno.h>
+#include <atomic>
+#include <mutex>
+
 
 class Participant {
 
-    public:
+    private:
+        std::mutex g_mutex; // Global mutex
         std::string name;
         unsigned char client_id;
         int auth_key;
-        std::shared_ptr<struct sockaddr_in> client_addr;
+        struct sockaddr_in client_addr;
+
+        bool connected = false; // Connected = true means client have connected to the system => client_addr has been set.
+
+    public:
+        Participant(const Participant& p) {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            this->name = p.name;
+            this->client_id = p.client_id;
+            this->auth_key = p.auth_key;
+            this->client_addr = p.client_addr;
+            this->connected = p.connected;
+        }
+
+        std::string getName() {
+            return name;
+        }
+        unsigned char getClientId() const {
+            return client_id;
+        }
+        int getAuthKey() const {
+            return auth_key;
+        }
+        void setClientAddress(struct sockaddr_in client_addr) {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            this->client_addr = client_addr;
+            this->connected = true;
+        }
+
+        struct sockaddr_in getClientAddress() {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            return client_addr;
+        }
 
         Participant(unsigned char client_id, std::string name, int auth_key);
 

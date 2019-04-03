@@ -3,7 +3,8 @@
 
 enum Message
 {
-	CLIENT_FRAME = 10
+	CLIENT_FRAME = 10,
+	REQUEST_IMAGE_STREAM = 11
 };
 
 #endif

@@ -1,17 +1,17 @@
 // The basic protocol transmits raw, uncompressed video frames only. This is
 // the most basic video protocol.
 
-#ifndef PROTOCOLS_BASIC_PROTOCOL_H
-#define PROTOCOLS_BASIC_PROTOCOL_H
+#ifndef VIDEO_FRAME_PROTOCOL_H
+#define VIDEO_FRAME_PROTOCOL_H
 
 #include <vector>
 
-#include "protocols/protocol.h"
-#include "video/video_frame.h"
+#include "protocol.h"
+#include "video_frame.h"
 #include "conference.h"
 #include "message_type.h"
 
-class BasicProtocolData : public ProtocolData {
+class VideoFrameProtocolData : public ProtocolData {
    public:
     std::vector<unsigned char> packageData() const override;
 
@@ -39,4 +39,4 @@ class BasicProtocolData : public ProtocolData {
 
 };
 
-#endif  // PROTOCOLS_BASIC_PROTOCOL_H
+#endif  // VIDEO_FRAME_PROTOCOL_H

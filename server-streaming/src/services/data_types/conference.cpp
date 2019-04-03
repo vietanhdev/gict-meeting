@@ -50,7 +50,8 @@ void Conference::readFromFile(std::string filepath) {
         YAML::Node yaml_participant = yaml_participants[i];
         unsigned char id = yaml_participant["id"].as<unsigned char>();
         std::string name = yaml_participant["name"].as<std::string>();
-        participants.push_back(Participant(id, name));
+        std::string auth_key = yaml_participant["auth_key"].as<std::string>();
+        participants.push_back(Participant(id, name, auth_key));
     }
 }
 

@@ -15,7 +15,7 @@ void VideoStreamService::videoUpService() {
     }
 
     std::cout << "Listening on port " << port << "." << std::endl;
-    BasicProtocolData protocol_data;
+    VideoFrameProtocolData protocol_data;
     while (true) {
         protocol_data.unpackData(socket.getPacket().data);
         protocol_data.getImage().display();
@@ -37,11 +37,10 @@ void VideoStreamService::videoDownService() {
     }
 
     std::cout << "Listening on port " << port << "." << std::endl;
-    BasicProtocolData protocol_data;
+    VideoFrameProtocolData protocol_data;
     while (true) {
         protocol_data.unpackData(socket.getPacket().data);
         protocol_data.getImage().display();
-
     }
 
 }

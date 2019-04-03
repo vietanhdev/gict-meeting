@@ -12,7 +12,7 @@
 #include "yaml-cpp/yaml.h"
 
 #include "conference.h"
-
+#include "stream_service.h"
  
 namespace Ui {
 class NewConferenceWizard;
@@ -36,6 +36,10 @@ private:
 
 private slots:
     void browseConfigFile();
+
+
+signals:
+    void newConferenceJoined();
 };
 
 

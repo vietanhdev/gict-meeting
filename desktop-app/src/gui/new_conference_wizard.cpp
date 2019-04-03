@@ -7,6 +7,10 @@ NewConferenceWizard::NewConferenceWizard(QWidget *parent)
     // Connect buttons
     connect(ui->configFileBrowseBtn, SIGNAL(released()), this,
             SLOT(browseConfigFile()));
+
+    // Signal after launching a conference successfully
+    // connect(this, SIGNAL(newConferenceJoined()), parent,
+    //         SLOT(startStreaming()));
 }
 
 NewConferenceWizard::~NewConferenceWizard() { delete ui; }
@@ -87,8 +91,14 @@ void NewConferenceWizard::browseConfigFile() {
 void NewConferenceWizard::done(int result) {
     if (result) {
         if (configLoaded) {
-            std::cout << "START STREAMING" << std::endl;
             this->destroy();
+            if (!StreamService::instance().startStreaming()) {
+                QMessageBox::critical(
+                    this, "Error",
+                    "Could not join the conference."
+                );
+            }
+            emit newConferenceJoined();
         } else {
             QMessageBox::critical(
                 this, "Config Error",

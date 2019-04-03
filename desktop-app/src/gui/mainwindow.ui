@@ -93,7 +93,7 @@
            <string notr="true"/>
           </property>
           <property name="text">
-           <string>Join/Leave</string>
+           <string>Join a Conference</string>
           </property>
           <property name="icon">
            <iconset resource="../../resources.qrc">

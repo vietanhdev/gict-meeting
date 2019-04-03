@@ -10,6 +10,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->myCameraView->setScene(new QGraphicsScene(this));
     ui->myCameraView->scene()->addItem(&pixmap);
 
+    new_conf_wizard = std::make_shared<NewConferenceWizard>();
+    // Connect finish signal from Conference Wizard
+    connect(new_conf_wizard.get(), SIGNAL(newConferenceJoined()), this, SLOT(startConference()));
+
     // Connect buttons
     connect(ui->infoBtn, SIGNAL(released()), this, SLOT(showAboutBox()));
     connect(ui->startStopBtn, SIGNAL(released()), this, SLOT(newConference()));
@@ -53,8 +57,23 @@ void MainWindow::playShutter() {
 
 
 void MainWindow::newConference() {
-    NewConferenceWizard *conf = new NewConferenceWizard;
-    conf->show();
+
+    StreamService &ss = StreamService::instance();
+
+    if (ss.isStreaming()) {
+        ss.stopStreaming();
+        ui->startStopBtn->setText("Join a Conference");
+    } else {
+        new_conf_wizard->restart();
+        new_conf_wizard->show();
+    }
+
+}
+
+
+
+void MainWindow::startConference() {
+    ui->startStopBtn->setText("Leave Conference");
 }
 
 
@@ -85,13 +104,19 @@ void MainWindow::showAboutBox() {
 void MainWindow::showCam() {
     using namespace cv;
 
-    if (!video.open(current_camera_index)) {
-        QMessageBox::critical(
-            this, "Camera Error",
-            "Make sure you entered a correct camera index,"
-            "<br>or that the camera is not being accessed by another program!");
-        return;
+    refreshCams();
+    if (!video.open(selected_camera_index)) {
+        selected_camera_index = -1;
+        if (!video.open(selected_camera_index)) {
+            QMessageBox::critical(
+                this, "Camera Error",
+                "Make sure you entered a correct camera index,"
+                "<br>or that the camera is not being accessed by another program!");
+            return;
+        }
     }
+
+    current_camera_index = selected_camera_index;
 
     Mat frame;
     while (true) {

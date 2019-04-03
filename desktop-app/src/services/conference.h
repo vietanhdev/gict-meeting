@@ -28,13 +28,23 @@ class Conference {
 
         std::vector<Participant> participants;
 
-    private:
-        Conference(); // Disallow instantiation outside of the class.
-
     public:
+        Conference();
+        Conference(const Conference&);
+        Conference& operator=(const Conference& c) {
+            this->name = c.name;
+            this->secret_key = c.secret_key;
+            this->server_ip = c.server_ip;
+            this->video_up_port = c.video_up_port;
+            this->video_down_port = c.video_down_port;
+            this->audio_up_port = c.audio_up_port;
+            this->audio_down_port = c.audio_down_port;
+            this->client_id = c.client_id;
+            this->client_name = c.client_name;
+            this->participants = c.participants;
+            return *this;
+        }
 
-        Conference(const Conference&) = delete;
-        Conference& operator=(const Conference &) = delete;
         Conference(Conference &&) = delete;
         Conference & operator=(Conference &&) = delete;
 

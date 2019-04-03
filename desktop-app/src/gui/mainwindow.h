@@ -21,6 +21,7 @@
 #include "file_storage.h"
 
 #include "new_conference_wizard.h"
+#include "stream_service.h"
 
 
 namespace Ui {
@@ -45,6 +46,7 @@ private slots:
     void showAboutBox();
     void refreshCams();
     void newConference();
+    void startConference();
     
 private:
     Ui::MainWindow *ui;
@@ -67,6 +69,9 @@ private:
     int MAX_CAMS = 5; // Max number of camera supported. This number used to scan cameras
     int current_camera_index = 0;
     int selected_camera_index = 0;
+
+
+    std::shared_ptr<NewConferenceWizard> new_conf_wizard;
 
 public:
     void setCurrentImage(const cv::Mat & img);

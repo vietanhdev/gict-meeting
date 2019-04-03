@@ -6,18 +6,12 @@ VideoStreamService::VideoStreamService() {}
 void VideoStreamService::videoUpService() {
 
     Conference &conference = Conference::instance();
-    const int port = conference.getVideoUpPort();
-    const ReceiverSocket socket(port);
 
-    if (!socket.bindSocketToListen()) {
-        std::cerr << "Could not bind socket at port: " << conference.getVideoUpPort() << std::endl;
-        return;
-    }
+    std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoUpSocket();
 
-    std::cout << "Listening on port " << port << "." << std::endl;
     VideoFrameProtocolData protocol_data;
     while (true) {
-        protocol_data.unpackHeader(socket.getPacket().data);
+        protocol_data.unpackHeader(socket->getPacket().data);
 
         // Wrong format
         if (protocol_data.getMessage() != Message::CLIENT_FRAME) {
@@ -28,7 +22,7 @@ void VideoStreamService::videoUpService() {
         // Authentication
         if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey())) {
             std::vector<unsigned char> data;
-            protocol_data.unpackData(socket.getPacket().data, data);
+            protocol_data.unpackData(socket->getPacket().data, data);
             VideoFrame video_frame(data);
             conference.setImage(protocol_data.getClientId(), video_frame.getImage());
 
@@ -42,25 +36,19 @@ void VideoStreamService::videoUpService() {
 
 void VideoStreamService::videoDownService() {
 
-   Conference &conference = Conference::instance();
-    const int port = conference.getVideoUpPort();
-    const ReceiverSocket socket(port);
+    Conference &conference = Conference::instance();
+    std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoDownSocket();
 
-    if (!socket.bindSocketToListen()) {
-        std::cerr << "Could not bind socket at port: " << conference.getVideoUpPort() << std::endl;
-        return;
-    }
-
-    std::cout << "Listening on port " << port << "." << std::endl;
     VideoFrameProtocolData protocol_data;
     while (true) {
-        protocol_data.unpackHeader(socket.getPacket().data); 
+        
+        protocol_data.unpackHeader(socket->getPacket().data); 
 
         // When client request image stream, update client address in participant
         if (protocol_data.getMessage() == Message::REQUEST_IMAGE_STREAM) {
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
-                conference.setClientAddress(protocol_data.getClientId(), socket.getPacket().client_addr);
+                conference.setClientAddress(protocol_data.getClientId(), socket->getPacket().client_addr);
             }
         }
 

@@ -20,6 +20,8 @@ class ReceiverSocket {
     // Creates a new socket and stores the handle.
     explicit ReceiverSocket(const int port_number);
 
+    int getSockFd();
+
     // Attempts to bind the socket on the port number provided to listen to
     // incoming UDP packets. If the socket could not be created (in the
     // constructor) or if the binding process fails, an error message will be

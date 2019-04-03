@@ -35,6 +35,10 @@ const bool ReceiverSocket::bindSocketToListen() const {
     return true;
 }
 
+int ReceiverSocket::getSockFd() {
+    return socket_handle_;
+}
+
 const Packet ReceiverSocket::getPacket() const {
 
     Packet packet;

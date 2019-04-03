@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     conference.readFromFile(config_file);
 
 
-    const int port = std::atoi (conference.video_up_port.c_str());
+    const int port = conference.getVideoUpPort();
     if (port < 0) {
         return -1;
     }

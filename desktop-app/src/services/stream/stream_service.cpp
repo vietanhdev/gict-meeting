@@ -17,12 +17,10 @@ void StreamService::upStreamingThread() {
             if (new_streaming_status == true) { // Start streaming
 
                 // Get up port
-                std::istringstream iss (streaming_service.conference.video_up_port);
-                int port;
-                iss >> port;
+                int port = streaming_service.conference.getVideoUpPort();
 
                 // Server ip addresss
-                std::string ip_address = streaming_service.conference.server_ip;
+                std::string ip_address = streaming_service.conference.getServerIp();
 
                 // Init a socket to the server
                 socket.init(ip_address, port);

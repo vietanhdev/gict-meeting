@@ -74,33 +74,33 @@ std::string Conference::getServerIp() {
 }
 void Conference::setVideoUpPort(std::string video_up_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->video_up_port = video_up_port;
+    this->video_up_port = std::atoi (video_up_port.c_str());
 }
-std::string Conference::getVideoUpPort() {
+int Conference::getVideoUpPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->video_up_port;
 }
 void Conference::setVideoDownPort(std::string video_down_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->video_down_port = video_down_port;
+    this->video_down_port = std::atoi (video_down_port.c_str());
 }
-std::string Conference::getVideoDownPort() {
+int Conference::getVideoDownPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->video_down_port;
 }
 void Conference::setAudioUpPort(std::string audio_up_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->audio_up_port = audio_up_port;
+    this->audio_up_port = std::atoi (audio_up_port.c_str());
 }
-std::string Conference::getAudioUpPort() {
+int Conference::getAudioUpPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->audio_up_port;
 }
 void Conference::setAudioDownPort(std::string audio_down_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->audio_down_port = audio_down_port;
+    this->audio_down_port = std::atoi (audio_down_port.c_str());
 }
-std::string Conference::getAudioDownPort() {
+int Conference::getAudioDownPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->audio_down_port;
 }

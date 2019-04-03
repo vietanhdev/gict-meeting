@@ -7,10 +7,6 @@ NewConferenceWizard::NewConferenceWizard(QWidget *parent)
     // Connect buttons
     connect(ui->configFileBrowseBtn, SIGNAL(released()), this,
             SLOT(browseConfigFile()));
-
-    // Signal after launching a conference successfully
-    // connect(this, SIGNAL(newConferenceJoined()), parent,
-    //         SLOT(startStreaming()));
 }
 
 NewConferenceWizard::~NewConferenceWizard() { delete ui; }
@@ -77,11 +73,11 @@ void NewConferenceWizard::browseConfigFile() {
                                 "client_name: %8\n"
                                 "\nClick 'Finish' to Join the conference."
                                  ).arg( QString::fromUtf8(new_conference.getName().c_str()))
-                                 .arg( QString::fromUtf8(new_conference.getServerIp().c_str()))
-                                 .arg( QString::fromUtf8(new_conference.getVideoUpPort().c_str()))
-                                 .arg( QString::fromUtf8(new_conference.getVideoDownPort().c_str()))
-                                 .arg( QString::fromUtf8(new_conference.getAudioUpPort().c_str()))
-                                 .arg( QString::fromUtf8(new_conference.getAudioDownPort().c_str()))
+                                 .arg(  QString::fromUtf8(new_conference.getServerIp().c_str()))
+                                 .arg( new_conference.getVideoUpPort() )
+                                 .arg( new_conference.getVideoDownPort() )
+                                 .arg( new_conference.getAudioUpPort() )
+                                 .arg( new_conference.getAudioDownPort() )
                                  .arg( QString::fromUtf8(new_conference.getClientId().c_str()))
                                  .arg( QString::fromUtf8(new_conference.getClientName().c_str()));
     ui->conferenceConfigReview->setText(configConfirm);

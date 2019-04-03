@@ -4,29 +4,30 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <cstdlib>
 
 #include "participant.h"
 
 class Conference {
 
-    public:
+    private:
         std::mutex global_mutex;
-
         std::string name;
         std::string secret_key;
 
         // Server
         std::string server_ip;
-        std::string video_up_port;
-        std::string video_down_port;
-        std::string audio_up_port;
-        std::string audio_down_port;
+        int video_up_port;
+        int video_down_port;
+        int audio_up_port;
+        int audio_down_port;
 
         // Client
         std::string client_id;
         std::string client_name;
 
         std::vector<Participant> participants;
+
 
     public:
         Conference();
@@ -60,13 +61,13 @@ class Conference {
         void setServerIp(std::string);
         std::string getServerIp();
         void setVideoUpPort(std::string);
-        std::string getVideoUpPort();
+        int getVideoUpPort();
         void setVideoDownPort(std::string);
-        std::string getVideoDownPort();
+        int getVideoDownPort();
         void setAudioUpPort(std::string);
-        std::string getAudioUpPort();
+        int getAudioUpPort();
         void setAudioDownPort(std::string);
-        std::string getAudioDownPort();
+        int getAudioDownPort();
         void setClientId(std::string);
         std::string getClientId();
         void setClientName(std::string);

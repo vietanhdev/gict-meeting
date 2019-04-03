@@ -22,7 +22,7 @@ std::vector<unsigned char> BasicProtocolData::packageData() const {
     message.insert(message.begin(), Conference::instance().getClientId());
 
     // Insert message type
-    message.insert(message.begin(), MessageType::CLIENT_FRAME);
+    message.insert(message.begin(), Message::CLIENT_FRAME);
 
     return message;
 

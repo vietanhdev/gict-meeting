@@ -20,7 +20,7 @@ void VideoStreamService::videoUpService() {
         protocol_data.unpackHeader(socket.getPacket().data);
 
         // Wrong format
-        if (protocol_data.getMessage() != MessageType::CLIENT_FRAME) {
+        if (protocol_data.getMessage() != Message::CLIENT_FRAME) {
             std::cerr << "Incoming packet in wrong format." << std::endl;
             continue;
         }

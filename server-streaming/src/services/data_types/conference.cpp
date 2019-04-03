@@ -48,7 +48,7 @@ void Conference::readFromFile(std::string filepath) {
     YAML::Node yaml_participants = config["participants"];
     for (std::size_t i = 0; i < yaml_participants.size(); i++) {
         YAML::Node yaml_participant = yaml_participants[i];
-        unsigned char id = yaml_participant["id"].as<unsigned char>();
+        unsigned char id = yaml_participant["client_id"].as<int>();
         std::string name = yaml_participant["name"].as<std::string>();
         int auth_key = yaml_participant["auth_key"].as<int>();
         participants.push_back(Participant(id, name, auth_key));
@@ -58,7 +58,7 @@ void Conference::readFromFile(std::string filepath) {
 // Check the auth_key of participants
 bool Conference::checkAuth(unsigned char client_id, int auth_key) {
     for (int i = 0; i < participants.size(); ++i) {
-        if (client_id == participants[i].client_id) {
+        if (static_cast<int>(client_id) == static_cast<int>(participants[i].client_id)) {
             if (auth_key == participants[i].auth_key) {
                 return true;
             }

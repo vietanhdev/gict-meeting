@@ -7,6 +7,6 @@ video_down_port: "8882"
 audio_up_port: "8883"
 audio_down_port: "8884"
 
-client_id: "1"
+client_id: "0"
 client_name: "Group1"
-client_auth_key: "24689"
+client_auth_key: "243234"

@@ -21,7 +21,7 @@
 #include "file_storage.h"
 
 #include "new_conference_wizard.h"
-#include "stream_service.h"
+#include "video_stream_service.h"
 
 
 namespace Ui {

@@ -1,16 +1,16 @@
 
-#include "stream_service.h"
+#include "video_stream_service.h"
 
-StreamService::StreamService() {}
+VideoStreamService::VideoStreamService() {}
 
-void StreamService::upStreamingThread() {
+void VideoStreamService::upStreamingThread() {
 
     SenderSocket socket;
     VideoCapture video_capture(false, 0.5);
     BasicProtocolData protocol_data;
 
     for (;;) {
-        StreamService &streaming_service = StreamService::instance();
+        VideoStreamService &streaming_service = VideoStreamService::instance();
         bool streaming = streaming_service.isStreaming();
         bool new_streaming_status = streaming_service.streaming_signal_flag;
         if (new_streaming_status != streaming) {
@@ -36,29 +36,29 @@ void StreamService::upStreamingThread() {
         }
 
         if (new_streaming_status) {
-            protocol_data.SetImage(video_capture.GetFrameFromCamera());
-            socket.sendPacket(protocol_data.PackageData());
+            protocol_data.setImage(video_capture.getFrameFromCamera());
+            socket.sendPacket(protocol_data.packageData());
         }
 
     }
 }
 
 
-void StreamService::downStreamingThread() {
+void VideoStreamService::downStreamingThread() {
 
     for (;;) {
 
     }
 }
 
-bool StreamService::isStreaming() { return this->streaming; }
+bool VideoStreamService::isStreaming() { return this->streaming; }
 
-void StreamService::setStreaming(bool streaming) {
+void VideoStreamService::setStreaming(bool streaming) {
     this->streaming_signal_flag = streaming;
 }
 
-bool StreamService::startStreaming() {
-    if (StreamService::instance().isStreaming()) {
+bool VideoStreamService::startStreaming() {
+    if (VideoStreamService::instance().isStreaming()) {
         return false;
     }
 
@@ -73,16 +73,16 @@ bool StreamService::startStreaming() {
         down_streaming_thread = std::make_shared<std::thread>(downStreamingThread);
     }
 
-    StreamService::instance().setStreaming(true);
+    VideoStreamService::instance().setStreaming(true);
 
     return true;
 }
 
-bool StreamService::stopStreaming() {
-    if (!StreamService::instance().isStreaming()) {
+bool VideoStreamService::stopStreaming() {
+    if (!VideoStreamService::instance().isStreaming()) {
         return false;
     }
 
-    StreamService::instance().setStreaming(false);
+    VideoStreamService::instance().setStreaming(false);
     return true;
 }

@@ -90,7 +90,7 @@ void NewConferenceWizard::done(int result) {
     if (result) {
         if (configLoaded) {
             this->destroy();
-            if (!StreamService::instance().startStreaming()) {
+            if (!VideoStreamService::instance().startStreaming()) {
                 QMessageBox::critical(
                     this, "Error",
                     "Could not join the conference."

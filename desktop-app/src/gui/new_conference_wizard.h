@@ -12,7 +12,7 @@
 #include "yaml-cpp/yaml.h"
 
 #include "conference.h"
-#include "stream_service.h"
+#include "video_stream_service.h"
  
 namespace Ui {
 class NewConferenceWizard;

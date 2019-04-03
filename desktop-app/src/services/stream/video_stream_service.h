@@ -1,5 +1,5 @@
-#ifndef STREAM_SERVICE_H
-#define STREAM_SERVICE_H
+#ifndef VIDEO_STREAM_SERVICE_H
+#define VIDEO_STREAM_SERVICE_H
 
 #include <string>
 #include <vector>
@@ -21,12 +21,12 @@
 #include "video_capture.h"
 
 
-class StreamService {
+class VideoStreamService {
 
 
     public:
-        static StreamService& instance(){
-            static StreamService stream_service;
+        static VideoStreamService& instance(){
+            static VideoStreamService stream_service;
             return stream_service;
         }
 
@@ -47,17 +47,17 @@ class StreamService {
         void setStreaming(bool streaming);
 
     private:
-        StreamService(); // Disallow instantiation outside of the class.
+        VideoStreamService(); // Disallow instantiation outside of the class.
 
         static void upStreamingThread();
         static void downStreamingThread();
 
     public:
 
-        StreamService(const StreamService&) = delete;
-        StreamService& operator=(const StreamService &) = delete;
-        StreamService(StreamService &&) = delete;
-        StreamService & operator=(StreamService &&) = delete;
+        VideoStreamService(const VideoStreamService&) = delete;
+        VideoStreamService& operator=(const VideoStreamService &) = delete;
+        VideoStreamService(VideoStreamService &&) = delete;
+        VideoStreamService & operator=(VideoStreamService &&) = delete;
 
         bool startStreaming();
         bool stopStreaming();

@@ -58,7 +58,7 @@ void MainWindow::playShutter() {
 
 void MainWindow::newConference() {
 
-    StreamService &ss = StreamService::instance();
+    VideoStreamService &ss = VideoStreamService::instance();
 
     if (ss.isStreaming()) {
         ss.stopStreaming();

@@ -86,7 +86,7 @@ add_executable(${PROJECT_NAME}
     "src/services/data_types/conference.cpp"
     "src/services/data_types/participant.cpp"
 
-    "src/services/stream/stream_service.cpp"
+    "src/services/stream/video_stream_service.cpp"
 
     "src/services/protocols/basic_protocol.cpp"
     "src/services/receiver/receiver_socket.cpp"

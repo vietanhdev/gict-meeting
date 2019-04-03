@@ -71,9 +71,11 @@ bool StreamService::startStreaming() {
     // Load current conference config
     this->conference = Conference::instance();
 
-    if (streaming_thread == nullptr) {
-        // Start streaming
+    if (up_streaming_thread == nullptr) {
         up_streaming_thread = std::make_shared<std::thread>(upStreamingThread);
+    }
+
+    if (down_streaming_thread == nullptr) {
         down_streaming_thread = std::make_shared<std::thread>(downStreamingThread);
     }
 

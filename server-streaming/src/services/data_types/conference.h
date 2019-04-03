@@ -68,8 +68,10 @@ class Conference {
         void setAudioDownPort(std::string);
         int getAudioDownPort();
 
-        void addParticipant(Participant p);
-
+        // Check the auth_key of participants
+        // Return true: correct id and auth_key
+        // Otherwise, return false
+        bool checkAuth(unsigned char client_id, int auth_key);
 
 };
 

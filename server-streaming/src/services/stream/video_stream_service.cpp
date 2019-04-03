@@ -18,7 +18,11 @@ void VideoStreamService::videoUpService() {
     VideoFrameProtocolData protocol_data;
     while (true) {
         protocol_data.unpackData(socket.getPacket().data);
-        protocol_data.getImage().display();
+
+        // Authentication
+        if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey())) {
+            protocol_data.getImage().display();
+        }
 
     }
 

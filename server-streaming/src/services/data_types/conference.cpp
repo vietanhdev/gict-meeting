@@ -50,9 +50,22 @@ void Conference::readFromFile(std::string filepath) {
         YAML::Node yaml_participant = yaml_participants[i];
         unsigned char id = yaml_participant["id"].as<unsigned char>();
         std::string name = yaml_participant["name"].as<std::string>();
-        std::string auth_key = yaml_participant["auth_key"].as<std::string>();
+        int auth_key = yaml_participant["auth_key"].as<int>();
         participants.push_back(Participant(id, name, auth_key));
     }
+}
+
+// Check the auth_key of participants
+bool Conference::checkAuth(unsigned char client_id, int auth_key) {
+    for (int i = 0; i < participants.size(); ++i) {
+        if (client_id == participants[i].client_id) {
+            if (auth_key == participants[i].auth_key) {
+                return true;
+            }
+            break;
+        } 
+    }
+    return false;
 }
 
 void Conference::setName(std::string name) {
@@ -110,8 +123,4 @@ void Conference::setAudioDownPort(std::string audio_down_port) {
 int Conference::getAudioDownPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->audio_down_port;
-}
-
-void Conference::addParticipant(Participant p) {
-    this->participants.push_back(p);
 }

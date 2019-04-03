@@ -9,3 +9,4 @@ audio_down_port: "8884"
 
 client_id: "1"
 client_name: "Group1"
+client_auth_key: "24689"

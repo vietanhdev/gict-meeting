@@ -46,6 +46,7 @@ void NewConferenceWizard::browseConfigFile() {
     if (!requireConfigField(config, "audio_down_port")) return;
     if (!requireConfigField(config, "client_id")) return;
     if (!requireConfigField(config, "client_name")) return;
+    if (!requireConfigField(config, "client_auth_key")) return;
 
 
     Conference &new_conference = Conference::instance();
@@ -59,6 +60,7 @@ void NewConferenceWizard::browseConfigFile() {
     new_conference.setAudioDownPort(config["audio_down_port"].as<std::string>());
     new_conference.setClientId(config["client_id"].as<std::string>());
     new_conference.setClientName(config["client_name"].as<std::string>());
+    new_conference.setClientAuthKey(config["client_auth_key"].as<std::string>());
 
 
     // Review config
@@ -78,7 +80,7 @@ void NewConferenceWizard::browseConfigFile() {
                                  .arg( new_conference.getVideoDownPort() )
                                  .arg( new_conference.getAudioUpPort() )
                                  .arg( new_conference.getAudioDownPort() )
-                                 .arg( QString::fromUtf8(new_conference.getClientId().c_str()))
+                                 .arg( new_conference.getClientId() )
                                  .arg( QString::fromUtf8(new_conference.getClientName().c_str()));
     ui->conferenceConfigReview->setText(configConfirm);
 

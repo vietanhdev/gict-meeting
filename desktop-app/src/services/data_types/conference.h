@@ -23,8 +23,9 @@ class Conference {
         int audio_down_port;
 
         // Client
-        std::string client_id;
+        unsigned char client_id;
         std::string client_name;
+        int client_auth_key;
 
         std::vector<Participant> participants;
 
@@ -42,6 +43,7 @@ class Conference {
             this->audio_down_port = c.audio_down_port;
             this->client_id = c.client_id;
             this->client_name = c.client_name;
+            this->client_auth_key = c.client_auth_key;
             this->participants = c.participants;
             return *this;
         }
@@ -69,9 +71,11 @@ class Conference {
         void setAudioDownPort(std::string);
         int getAudioDownPort();
         void setClientId(std::string);
-        std::string getClientId();
+        unsigned char getClientId();
         void setClientName(std::string);
         std::string getClientName();
+        void setClientAuthKey(std::string);
+        int getClientAuthKey();
 
         void addParticipant(Participant p);
 

@@ -37,7 +37,6 @@ class VideoStreamService {
         std::atomic<bool> streaming_signal_flag = false; 
 
         std::atomic<bool> streaming = false; // Current streaming status
-        Conference conference;
 
         std::shared_ptr<std::thread> up_streaming_thread;
         std::shared_ptr<std::thread> down_streaming_thread;

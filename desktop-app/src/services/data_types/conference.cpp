@@ -14,6 +14,7 @@ Conference::Conference(const Conference& c) {
     this->audio_down_port = c.audio_down_port;
     this->client_id = c.client_id;
     this->client_name = c.client_name;
+    this->client_auth_key = c.client_auth_key;
     this->participants = c.participants;
 }
 
@@ -75,9 +76,9 @@ int Conference::getAudioDownPort() {
 }
 void Conference::setClientId(std::string client_id) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->client_id = client_id;
+    this->client_id = std::atoi (client_id.c_str());
 }
-std::string Conference::getClientId() {
+unsigned char Conference::getClientId() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->client_id;
 }
@@ -88,6 +89,14 @@ void Conference::setClientName(std::string client_name) {
 std::string Conference::getClientName() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->client_name;
+}
+void Conference::setClientAuthKey(std::string client_auth_key) {
+    std::lock_guard<std::mutex> lock(global_mutex);
+    this->client_auth_key = std::atoi (client_auth_key.c_str());
+}
+int Conference::getClientAuthKey() {
+    std::lock_guard<std::mutex> lock(global_mutex);
+    return this->client_auth_key;
 }
 
 

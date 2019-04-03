@@ -17,10 +17,10 @@ void VideoStreamService::upStreamingThread() {
             if (new_streaming_status == true) { // Start streaming
 
                 // Get up port
-                int port = streaming_service.conference.getVideoUpPort();
+                int port = Conference::instance().getVideoUpPort();
 
                 // Server ip addresss
-                std::string ip_address = streaming_service.conference.getServerIp();
+                std::string ip_address = Conference::instance().getServerIp();
 
                 // Init a socket to the server
                 socket.init(ip_address, port);
@@ -61,9 +61,6 @@ bool VideoStreamService::startStreaming() {
     if (VideoStreamService::instance().isStreaming()) {
         return false;
     }
-
-    // Load current conference config
-    this->conference = Conference::instance();
 
     if (up_streaming_thread == nullptr) {
         up_streaming_thread = std::make_shared<std::thread>(upStreamingThread);

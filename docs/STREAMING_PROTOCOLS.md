@@ -1,6 +1,14 @@
 # Streaming Protocol
 
-- All message is byte
+- All messages are byte-formated.
+
+## Byte-code definition:
+
+CLIENT_FRAME 10
+
+## Variables
+client_id: Id of client.
 
 ## Video Uploading
-App -> Server: []
+App -> Server:  <CLIENT_FRAME>< client_id > <client_auth_key> < frame_info > <pay_load>
+               |...1 byte...||...1 byte... |  |...4byte...|    |...4byte...|

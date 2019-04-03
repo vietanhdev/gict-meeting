@@ -34,6 +34,8 @@ bool VideoFrameProtocolData::unpackData( const std::vector<unsigned char>& raw_b
     std::vector<unsigned char> video_frame_bytes(first, last);
 
     video_frame_ = VideoFrame(video_frame_bytes);
+
+    return true;
 }
 
 

@@ -4,8 +4,10 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <iostream>
 
 #include "participant.h"
+#include "yaml-cpp/yaml.h"
 
 class Conference {
 
@@ -22,9 +24,6 @@ class Conference {
         std::string audio_up_port;
         std::string audio_down_port;
 
-        // Client
-        std::string client_id;
-        std::string client_name;
 
         std::vector<Participant> participants;
 
@@ -39,8 +38,6 @@ class Conference {
             this->video_down_port = c.video_down_port;
             this->audio_up_port = c.audio_up_port;
             this->audio_down_port = c.audio_down_port;
-            this->client_id = c.client_id;
-            this->client_name = c.client_name;
             this->participants = c.participants;
             return *this;
         }
@@ -52,6 +49,9 @@ class Conference {
             static Conference conference;
             return conference;
         }
+
+
+        void readFromFile(std::string);
 
         void setName(std::string);
         std::string getName();
@@ -67,10 +67,6 @@ class Conference {
         std::string getAudioUpPort();
         void setAudioDownPort(std::string);
         std::string getAudioDownPort();
-        void setClientId(std::string);
-        std::string getClientId();
-        void setClientName(std::string);
-        std::string getClientName();
 
         void addParticipant(Participant p);
 

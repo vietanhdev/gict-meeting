@@ -17,7 +17,7 @@ NewConferenceWizard::~NewConferenceWizard() { delete ui; }
 
 
 bool NewConferenceWizard::requireConfigField(const YAML::Node & config, std::string config_field) {
-    if (!config["conference_name"]) {
+    if (!config[config_field]) {
         std::string error_msg = "Wrong format configuration file - Missing:" + config_field;
         QMessageBox::critical(
             this, "Config Error",
@@ -48,6 +48,8 @@ void NewConferenceWizard::browseConfigFile() {
     if (!requireConfigField(config, "video_down_port")) return;
     if (!requireConfigField(config, "audio_up_port")) return;
     if (!requireConfigField(config, "audio_down_port")) return;
+    if (!requireConfigField(config, "client_id")) return;
+    if (!requireConfigField(config, "client_name")) return;
 
 
     Conference &new_conference = Conference::instance();

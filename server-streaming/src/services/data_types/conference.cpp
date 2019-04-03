@@ -12,9 +12,40 @@ Conference::Conference(const Conference& c) {
     this->video_down_port = c.video_down_port;
     this->audio_up_port = c.audio_up_port;
     this->audio_down_port = c.audio_down_port;
-    this->client_id = c.client_id;
-    this->client_name = c.client_name;
     this->participants = c.participants;
+}
+
+
+bool requireConfigField(const YAML::Node & config, std::string config_field) {
+    if (!config[config_field]) {
+        std::cout << "Wrong format configuration file - Missing:" + config_field << std::endl;
+        return false;
+    }
+    return true;
+}
+
+
+
+void Conference::readFromFile(std::string filepath) {
+    // Load config file
+    YAML::Node config = YAML::LoadFile(filepath);
+
+    // Check config fields
+    if (!requireConfigField(config, "conference_name")) exit(1);
+    if (!requireConfigField(config, "secret_key")) exit(1);
+    if (!requireConfigField(config, "server_ip")) exit(1);
+    if (!requireConfigField(config, "video_up_port")) exit(1);
+    if (!requireConfigField(config, "video_down_port")) exit(1);
+    if (!requireConfigField(config, "audio_up_port")) exit(1);
+    if (!requireConfigField(config, "audio_down_port")) exit(1);
+    
+    this->setName(config["conference_name"].as<std::string>());
+    this->setSecretKey(config["secret_key"].as<std::string>());
+    this->setServerIp(config["server_ip"].as<std::string>());
+    this->setVideoUpPort(config["video_up_port"].as<std::string>());
+    this->setVideoDownPort(config["video_down_port"].as<std::string>());
+    this->setAudioUpPort(config["audio_up_port"].as<std::string>());
+    this->setAudioDownPort(config["audio_down_port"].as<std::string>());
 }
 
 void Conference::setName(std::string name) {
@@ -73,23 +104,6 @@ std::string Conference::getAudioDownPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
     return this->audio_down_port;
 }
-void Conference::setClientId(std::string client_id) {
-    std::lock_guard<std::mutex> lock(global_mutex);
-    this->client_id = client_id;
-}
-std::string Conference::getClientId() {
-    std::lock_guard<std::mutex> lock(global_mutex);
-    return this->client_id;
-}
-void Conference::setClientName(std::string client_name) {
-    std::lock_guard<std::mutex> lock(global_mutex);
-    this->client_name = client_name;
-}
-std::string Conference::getClientName() {
-    std::lock_guard<std::mutex> lock(global_mutex);
-    return this->client_name;
-}
-
 
 void Conference::addParticipant(Participant p) {
     this->participants.push_back(p);

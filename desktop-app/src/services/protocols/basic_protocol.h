@@ -28,6 +28,8 @@ class BasicProtocolData : public ProtocolData {
    // Return client id of video frame (Who sent this frame?)
     unsigned char getClientId() const;
 
+    int getClientAuthKey() const;
+
    private:
     unsigned char client_id;
     int client_auth_key;

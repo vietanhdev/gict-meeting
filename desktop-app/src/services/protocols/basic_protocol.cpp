@@ -57,3 +57,7 @@ bool BasicProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes)
 unsigned char BasicProtocolData::getClientId() const {
     return client_id;
 }
+
+int BasicProtocolData::getClientAuthKey() const {
+    return client_auth_key;
+}

@@ -1,4 +1,5 @@
 /desktop-app/build
+/server-streaming/build
 .vscode
 desktop-app/src/services/receiver.cpp
 desktop-app/src/services/sender.cpp

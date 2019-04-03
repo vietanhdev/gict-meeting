@@ -17,9 +17,10 @@ class Participant {
     public:
         std::string name;
         unsigned char client_id;
+         std::string auth_key;
         std::shared_ptr<struct sockaddr_in> client_addr;
 
-        Participant(unsigned char client_id, std::string name);
+        Participant(unsigned char client_id, std::string name, std::string auth_key);
 
 };
 

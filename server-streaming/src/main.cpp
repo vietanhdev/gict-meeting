@@ -5,7 +5,6 @@
 #include <thread>
 
 #include "conference.h"
-#include "basic_protocol.h"
 #include "receiver_socket.h"
 #include "video_stream_service.h"
 

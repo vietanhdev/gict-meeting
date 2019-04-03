@@ -23,11 +23,11 @@ class ReceiverSocket {
     // incoming UDP packets. If the socket could not be created (in the
     // constructor) or if the binding process fails, an error message will be
     // printed to stderr. The method returns true on success, false otherwise.
-    const bool BindSocketToListen() const;
+    const bool bindSocketToListen() const;
 
     // Waits for the next packet on the given port, and returns vector of bytes
     // (stored as unsigned chars) that contains the raw packet data.
-    const std::vector<unsigned char> GetPacket() const;
+    const std::vector<unsigned char> getPacket() const;
 
    private:
     // This buffer will be used to collect incoming packet data. It is only used

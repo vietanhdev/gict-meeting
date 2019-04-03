@@ -11,7 +11,7 @@ ReceiverSocket::ReceiverSocket(const int port_number) : port_(port_number) {
     socket_handle_ = socket(AF_INET, SOCK_DGRAM, 0);
 }
 
-const bool ReceiverSocket::BindSocketToListen() const {
+const bool ReceiverSocket::bindSocketToListen() const {
     if (socket_handle_ < 0) {
         std::cerr << "Binding failed. Socket was not initialized." << std::endl;
         return false;
@@ -34,7 +34,7 @@ const bool ReceiverSocket::BindSocketToListen() const {
     return true;
 }
 
-const std::vector<unsigned char> ReceiverSocket::GetPacket() const {
+const std::vector<unsigned char> ReceiverSocket::getPacket() const {
     // Get the data from the next incoming packet.
     sockaddr_in remote_addr;
     socklen_t addrlen = sizeof(remote_addr);

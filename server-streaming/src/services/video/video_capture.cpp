@@ -9,7 +9,7 @@
 VideoCapture::VideoCapture(const bool show_video, const float scale)
     : show_video_(show_video), scale_(scale), capture_(cv::VideoCapture(-1)) {}
 
-VideoFrame VideoCapture::GetFrameFromCamera() {
+VideoFrame VideoCapture::getFrameFromCamera() {
     if (!capture_.isOpened()) {
         std::cerr << "Could not get frame. Camera not available." << std::endl;
         return VideoFrame();
@@ -22,7 +22,7 @@ VideoFrame VideoCapture::GetFrameFromCamera() {
     }
     VideoFrame video_frame(image);
     if (show_video_) {
-        video_frame.Display();
+        video_frame.display();
     }
     return video_frame;
 }

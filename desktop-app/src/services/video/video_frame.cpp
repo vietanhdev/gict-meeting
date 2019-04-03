@@ -27,7 +27,7 @@ VideoFrame::VideoFrame(const std::vector<unsigned char> frame_bytes) {
     frame_image_ = cv::imdecode(frame_bytes, cv::IMREAD_COLOR);
 }
 
-void VideoFrame::Display() const {
+void VideoFrame::display() const {
     // Do nothing for empty images.
     if (frame_image_.empty()) {
         return;
@@ -36,7 +36,7 @@ void VideoFrame::Display() const {
     cv::waitKey(kDisplayDelayTimeMS);
 }
 
-std::vector<unsigned char> VideoFrame::GetJPEG() const {
+std::vector<unsigned char> VideoFrame::getJPEG() const {
     const std::vector<int> compression_params = {cv::IMWRITE_JPEG_QUALITY,
                                                  kJPEGQuality};
     std::vector<unsigned char> data_buffer;

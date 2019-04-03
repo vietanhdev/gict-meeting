@@ -6,3 +6,5 @@ video_up_port: "8881"
 video_down_port: "8882"
 audio_up_port: "8883"
 audio_down_port: "8884"
+
+num_of_participants: 5

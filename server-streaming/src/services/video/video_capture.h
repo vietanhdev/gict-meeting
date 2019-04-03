@@ -29,7 +29,7 @@ class VideoCapture {
     // NOTE: This method cannot be const, since the cv::VideoCapture object is
     // modified through a non-const method when getting a new frame from the
     // camera.
-    VideoFrame GetFrameFromCamera();
+    VideoFrame getFrameFromCamera();
 
    private:
     // The OpenCV camera capture object. This is used to interface with a

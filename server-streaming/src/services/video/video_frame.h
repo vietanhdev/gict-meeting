@@ -22,11 +22,11 @@ class VideoFrame {
     // Uses the underlying video/image/gui library to display the frame on the
     // user's screen. Only one frame can be displayed at a time, as all frames
     // will share the same GUI window.
-    void Display() const;
+    void display() const;
 
     // Returns the raw byte representation of the given video frame. Singe image
     // compression to JPEG is also handled here to minimize the frame size.
-    std::vector<unsigned char> GetJPEG() const;
+    std::vector<unsigned char> getJPEG() const;
 
    private:
     cv::Mat frame_image_;

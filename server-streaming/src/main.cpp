@@ -2,10 +2,12 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <thread>
 
 #include "conference.h"
 #include "basic_protocol.h"
 #include "receiver_socket.h"
+#include "video_stream_service.h"
 
 int main(int argc, char** argv) {
     // Welcome message
@@ -21,21 +23,8 @@ int main(int argc, char** argv) {
     Conference &conference = Conference::instance();
     conference.readFromFile(config_file);
 
+    // Start threads
+    std::thread video_up(VideoStreamService::videoUpService);
 
-    const int port = conference.getVideoUpPort();
-    if (port < 0) {
-        return -1;
-    }
-    const ReceiverSocket socket(port);
-    if (!socket.BindSocketToListen()) {
-        std::cerr << "Could not bind socket." << std::endl;
-        return -1;
-    }
-    std::cout << "Listening on port " << port << "." << std::endl;
-    BasicProtocolData protocol_data;
-    while (true) {  // TODO: break out cleanly when done.
-        protocol_data.UnpackData(socket.GetPacket());
-        protocol_data.GetImage().Display();
-    }
     return 0;
 }

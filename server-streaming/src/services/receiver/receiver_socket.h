@@ -9,6 +9,7 @@
 #define RECEIVER_SOCKET_H
 
 #include <vector>
+#include "packet.h"
 
 // This is the maximum UDP packet size, and the buffer will be allocated for
 // the max amount.
@@ -25,9 +26,8 @@ class ReceiverSocket {
     // printed to stderr. The method returns true on success, false otherwise.
     const bool bindSocketToListen() const;
 
-    // Waits for the next packet on the given port, and returns vector of bytes
-    // (stored as unsigned chars) that contains the raw packet data.
-    const std::vector<unsigned char> getPacket() const;
+    // Waits for the next packet on the given port, and returns a packet: client address and data as a vector of bytes
+    const Packet getPacket() const;
 
    private:
     // This buffer will be used to collect incoming packet data. It is only used

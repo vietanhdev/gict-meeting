@@ -29,8 +29,8 @@ class VideoStreamService {
 
     public:
         static void videoUpService();
+        static void videoDownService();
 
-        
 };
 
 #endif

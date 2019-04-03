@@ -4,27 +4,8 @@
 
 std::vector<unsigned char> BasicProtocolData::packageData() const {
     std::vector<unsigned char> message = video_frame_.getJPEG();
-
-    // 4 dummy bytes
-    // May be used in the future for frame data
-    message.insert(message.begin(), 0);
-    message.insert(message.begin(), 0); 
-    message.insert(message.begin(), 0); 
-    message.insert(message.begin(), 0);
-
-    // 4 bytes auth key
-    int n = Conference::instance().getClientAuthKey();
-    message.insert(message.begin(), n & 0xFF);
-    message.insert(message.begin(), (n >> 8) & 0xFF); 
-    message.insert(message.begin(), (n >> 16) & 0xFF); 
-    message.insert(message.begin(), (n >> 24) & 0xFF);
-
-    // Insert client id
-    message.insert(message.begin(), Conference::instance().getClientId());
-
     // Insert message type
     message.insert(message.begin(), MessageType::CLIENT_FRAME);
-
 }
 
 
@@ -33,12 +14,14 @@ std::vector<unsigned char> BasicProtocolData::packageData() const {
 bool BasicProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes) {
 
     // Corrupted package
-    if (raw_bytes.size() <= 6) {
+    if (raw_bytes.size() <= 10) {
+        std::cerr << "Too short packet. " << raw_bytes.size() << std::endl;
         return false;
     }
 
     // Wrong format
     if (raw_bytes[0] != MessageType::CLIENT_FRAME) {
+        std::cerr << "Incoming packet in wrong format." << std::endl;
         return false;
     }
 
@@ -46,7 +29,7 @@ bool BasicProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes)
     client_auth_key = (raw_bytes[2] << 24) + (raw_bytes[3] << 16) + (raw_bytes[4] << 8) + raw_bytes[5];
 
     // Extract frame data
-    std::vector<unsigned char>::const_iterator first = raw_bytes.begin() + 6;
+    std::vector<unsigned char>::const_iterator first = raw_bytes.begin() + 10;
     std::vector<unsigned char>::const_iterator last = raw_bytes.end();
     std::vector<unsigned char> video_frame_bytes(first, last);
 

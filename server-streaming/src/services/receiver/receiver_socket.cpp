@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <vector>
+#include "packet.h"
 
 ReceiverSocket::ReceiverSocket(const int port_number) : port_(port_number) {
     socket_handle_ = socket(AF_INET, SOCK_DGRAM, 0);
@@ -34,19 +35,21 @@ const bool ReceiverSocket::bindSocketToListen() const {
     return true;
 }
 
-const std::vector<unsigned char> ReceiverSocket::getPacket() const {
+const Packet ReceiverSocket::getPacket() const {
+
+    Packet packet;
+    
     // Get the data from the next incoming packet.
-    sockaddr_in remote_addr;
-    socklen_t addrlen = sizeof(remote_addr);
+    socklen_t addrlen = sizeof(packet.client_addr);
     const int num_bytes =
         recvfrom(socket_handle_,
                  const_cast<void*>(reinterpret_cast<const void*>(buffer_)),
                  kMaxPacketBufferSize, 0,
-                 reinterpret_cast<sockaddr*>(&remote_addr), &addrlen);
+                 reinterpret_cast<sockaddr*>(&packet.client_addr), &addrlen);
     // Copy the data (if any) into the data vector.
-    std::vector<unsigned char> data;
     if (num_bytes > 0) {
-        data.insert(data.end(), &buffer_[0], &buffer_[num_bytes]);
+        packet.data.insert(packet.data.end(), &buffer_[0], &buffer_[num_bytes]);
     }
-    return data;
+
+    return packet;
 }

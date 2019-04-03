@@ -25,7 +25,6 @@ class Conference {
         int audio_up_port;
         int audio_down_port;
 
-
         std::vector<Participant> participants;
 
     public:

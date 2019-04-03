@@ -25,6 +25,8 @@ std::vector<unsigned char> BasicProtocolData::packageData() const {
     // Insert message type
     message.insert(message.begin(), MessageType::CLIENT_FRAME);
 
+    return message;
+
 }
 
 

@@ -1,7 +1,5 @@
 #include "conference.h"
 
-
-
 Conference::Conference() {}
 
 Conference::Conference(const Conference& c) {
@@ -15,16 +13,14 @@ Conference::Conference(const Conference& c) {
     this->participants = c.participants;
 }
 
-
-bool requireConfigField(const YAML::Node & config, std::string config_field) {
+bool requireConfigField(const YAML::Node& config, std::string config_field) {
     if (!config[config_field]) {
-        std::cout << "Wrong format configuration file - Missing:" + config_field << std::endl;
+        std::cout << "Wrong format configuration file - Missing:" + config_field
+                  << std::endl;
         return false;
     }
     return true;
 }
-
-
 
 void Conference::readFromFile(std::string filepath) {
     // Load config file
@@ -38,7 +34,7 @@ void Conference::readFromFile(std::string filepath) {
     if (!requireConfigField(config, "video_down_port")) exit(1);
     if (!requireConfigField(config, "audio_up_port")) exit(1);
     if (!requireConfigField(config, "audio_down_port")) exit(1);
-    
+
     this->setName(config["conference_name"].as<std::string>());
     this->setSecretKey(config["secret_key"].as<std::string>());
     this->setServerIp(config["server_ip"].as<std::string>());
@@ -46,6 +42,16 @@ void Conference::readFromFile(std::string filepath) {
     this->setVideoDownPort(config["video_down_port"].as<std::string>());
     this->setAudioUpPort(config["audio_up_port"].as<std::string>());
     this->setAudioDownPort(config["audio_down_port"].as<std::string>());
+
+    // Init participant list
+    participants.clear();
+    YAML::Node yaml_participants = config["participants"];
+    for (std::size_t i = 0; i < yaml_participants.size(); i++) {
+        YAML::Node yaml_participant = yaml_participants[i];
+        unsigned char id = yaml_participant["id"].as<unsigned char>();
+        std::string name = yaml_participant["name"].as<std::string>();
+        participants.push_back(Participant(id, name));
+    }
 }
 
 void Conference::setName(std::string name) {
@@ -74,7 +80,7 @@ std::string Conference::getServerIp() {
 }
 void Conference::setVideoUpPort(std::string video_up_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->video_up_port = std::atoi (video_up_port.c_str());
+    this->video_up_port = std::atoi(video_up_port.c_str());
 }
 int Conference::getVideoUpPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
@@ -82,7 +88,7 @@ int Conference::getVideoUpPort() {
 }
 void Conference::setVideoDownPort(std::string video_down_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->video_down_port = std::atoi (video_down_port.c_str());
+    this->video_down_port = std::atoi(video_down_port.c_str());
 }
 int Conference::getVideoDownPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
@@ -90,7 +96,7 @@ int Conference::getVideoDownPort() {
 }
 void Conference::setAudioUpPort(std::string audio_up_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->audio_up_port = std::atoi (audio_up_port.c_str());
+    this->audio_up_port = std::atoi(audio_up_port.c_str());
 }
 int Conference::getAudioUpPort() {
     std::lock_guard<std::mutex> lock(global_mutex);
@@ -98,7 +104,7 @@ int Conference::getAudioUpPort() {
 }
 void Conference::setAudioDownPort(std::string audio_down_port) {
     std::lock_guard<std::mutex> lock(global_mutex);
-    this->audio_down_port = std::atoi (audio_down_port.c_str());
+    this->audio_down_port = std::atoi(audio_down_port.c_str());
 }
 int Conference::getAudioDownPort() {
     std::lock_guard<std::mutex> lock(global_mutex);

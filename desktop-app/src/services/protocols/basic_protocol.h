@@ -5,7 +5,7 @@
 #define PROTOCOLS_BASIC_PROTOCOL_H
 
 #include <vector>
-
+#include <iostream>
 #include "protocols/protocol.h"
 #include "video/video_frame.h"
 #include "conference.h"

@@ -8,3 +8,10 @@ audio_up_port: "8883"
 audio_down_port: "8884"
 
 num_of_participants: 5
+participants:
+    - id: 0
+      name: "Group 1"
+      auth_key: "243234"
+    - id: 1
+      name: "Group 2"
+      auth_key: "243235"

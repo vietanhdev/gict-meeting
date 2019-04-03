@@ -5,14 +5,14 @@
 std::vector<unsigned char> BasicProtocolData::packageData() const {
     std::vector<unsigned char> message = video_frame_.getJPEG();
 
-    // 4 dummy byte.
+    // 4 dummy bytes
     // May be used in the future for frame data
     message.insert(message.begin(), 0);
     message.insert(message.begin(), 0); 
     message.insert(message.begin(), 0); 
     message.insert(message.begin(), 0);
 
-    // 4 byte auth key
+    // 4 bytes auth key
     int n = Conference::instance().getClientAuthKey();
     message.insert(message.begin(), n & 0xFF);
     message.insert(message.begin(), (n >> 8) & 0xFF); 

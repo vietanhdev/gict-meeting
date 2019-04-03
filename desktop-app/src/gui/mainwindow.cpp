@@ -104,72 +104,72 @@ void MainWindow::showAboutBox() {
 void MainWindow::showCam() {
     using namespace cv;
 
-    refreshCams();
-    if (!video.open(selected_camera_index)) {
-        selected_camera_index = -1;
-        if (!video.open(selected_camera_index)) {
-            QMessageBox::critical(
-                this, "Camera Error",
-                "Make sure you entered a correct camera index,"
-                "<br>or that the camera is not being accessed by another program!");
-            return;
-        }
-    }
+    // refreshCams();
+    // if (!video.open(selected_camera_index)) {
+    //     selected_camera_index = -1;
+    //     if (!video.open(selected_camera_index)) {
+    //         QMessageBox::critical(
+    //             this, "Camera Error",
+    //             "Make sure you entered a correct camera index,"
+    //             "<br>or that the camera is not being accessed by another program!");
+    //         return;
+    //     }
+    // }
 
-    current_camera_index = selected_camera_index;
+    // current_camera_index = selected_camera_index;
 
-    Mat frame;
-    while (true) {
+    // Mat frame;
+    // while (true) {
 
-        // User changed camera
-        if (selected_camera_index != current_camera_index) {
+    //     // User changed camera
+    //     if (selected_camera_index != current_camera_index) {
             
-            video.release();
-            refreshCams();
-            current_camera_index = selected_camera_index;
-            video.open(current_camera_index);
+    //         video.release();
+    //         refreshCams();
+    //         current_camera_index = selected_camera_index;
+    //         video.open(current_camera_index);
 
-        } else if (!video.isOpened()) {
+    //     } else if (!video.isOpened()) {
 
-            // Reset to default camera (0)
-            refreshCams();
-            current_camera_index = selected_camera_index =
-            ui->cameraSelector
-                ->itemData(ui->cameraSelector->currentIndex())
-                .toInt();
-            ui->cameraSelector->setCurrentIndex(0);
-            video.open(current_camera_index);
+    //         // Reset to default camera (0)
+    //         refreshCams();
+    //         current_camera_index = selected_camera_index =
+    //         ui->cameraSelector
+    //             ->itemData(ui->cameraSelector->currentIndex())
+    //             .toInt();
+    //         ui->cameraSelector->setCurrentIndex(0);
+    //         video.open(current_camera_index);
 
-        }
+    //     }
 
-        // If we still cannot open camera, exit the program
-        if (!video.isOpened()) {
-            QMessageBox::critical(
-            this, "Camera Error",
-            "Make sure you entered a correct camera index,"
-            "<br>or that the camera is not being accessed by another program!");
-            exit(1);
-        }
+    //     // If we still cannot open camera, exit the program
+    //     if (!video.isOpened()) {
+    //         QMessageBox::critical(
+    //         this, "Camera Error",
+    //         "Make sure you entered a correct camera index,"
+    //         "<br>or that the camera is not being accessed by another program!");
+    //         exit(1);
+    //     }
 
-        video >> frame;
-        if (!frame.empty()) {
+    //     video >> frame;
+    //     if (!frame.empty()) {
 
-            // Flip frame
-            if (ui->flipCameraCheckBox->isChecked()) {
-                flip(frame, frame, 1);
-            }
+    //         // Flip frame
+    //         if (ui->flipCameraCheckBox->isChecked()) {
+    //             flip(frame, frame, 1);
+    //         }
 
-            setCurrentImage(frame);
+    //         setCurrentImage(frame);
 
-            // ### Show current image
-            QImage qimg(frame.data, static_cast<int>(frame.cols),
-                        static_cast<int>(frame.rows),
-                        static_cast<int>(frame.step), QImage::Format_RGB888);
-            pixmap.setPixmap(QPixmap::fromImage(qimg.rgbSwapped()));
-            ui->myCameraView->fitInView(&pixmap, Qt::KeepAspectRatio);
-        }
-        qApp->processEvents();
-    }
+    //         // ### Show current image
+    //         QImage qimg(frame.data, static_cast<int>(frame.cols),
+    //                     static_cast<int>(frame.rows),
+    //                     static_cast<int>(frame.step), QImage::Format_RGB888);
+    //         pixmap.setPixmap(QPixmap::fromImage(qimg.rgbSwapped()));
+    //         ui->myCameraView->fitInView(&pixmap, Qt::KeepAspectRatio);
+    //     }
+    //     qApp->processEvents();
+    // }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

@@ -11,6 +11,16 @@
 
 #include "conference.h"
 
+
+#include <iostream>
+#include <string>
+#include <vector>
+
+#include "basic_protocol.h"
+#include "sender_socket.h"
+#include "video_capture.h"
+
+
 class StreamService {
 
 
@@ -21,10 +31,16 @@ class StreamService {
         }
 
     private:
-        std::atomic<bool> streaming = false;
+
+        // This flag will pass the start/stop streaming to the worker threads.
+        // Set this to "true" to start streaming, otherwise, set it to "false"
+        std::atomic<bool> streaming_signal_flag = false; 
+
+        std::atomic<bool> streaming = false; // Current streaming status
         Conference conference;
 
-        std::shared_ptr<std::thread> streaming_thread;
+        std::shared_ptr<std::thread> up_streaming_thread;
+        std::shared_ptr<std::thread> down_streaming_thread;
 
     public:
         bool isStreaming();
@@ -33,7 +49,8 @@ class StreamService {
     private:
         StreamService(); // Disallow instantiation outside of the class.
 
-        static void streamingThread();
+        static void upStreamingThread();
+        static void downStreamingThread();
 
     public:
 

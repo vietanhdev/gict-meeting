@@ -1,2 +1,4 @@
 /desktop-app/build
 .vscode
+desktop-app/src/services/receiver.cpp
+desktop-app/src/services/sender.cpp

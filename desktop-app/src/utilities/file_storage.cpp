@@ -1,6 +1,6 @@
 #include "file_storage.h"
 
-using namespace ml_cam;
+using namespace gict_video_conf;
 
 FileStorage::FileStorage() {
     DATA_FOLDER = fs::path(getHomePath()) / DATA_FOLDER_NAME;

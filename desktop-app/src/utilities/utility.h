@@ -6,7 +6,7 @@
 #include <iostream>
 #include <QImage>
 
-namespace ml_cam {
+namespace gict_video_conf {
 
     void setLabel(cv::Mat& im, const std::string label, const cv::Point & origin);
     std::string getHomePath();

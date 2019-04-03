@@ -9,7 +9,7 @@
 #include <chrono>
 #include <cstdlib>
 
-namespace ml_cam {
+namespace gict_video_conf {
 
 class FileStorage {
    private:
@@ -37,6 +37,6 @@ class FileStorage {
     bool saveImage(const cv::Mat & img);
 };
 
-}  // namespace ml_cam
+}  // namespace gict_video_conf
 
 #endif // FILE_STORAGE_H

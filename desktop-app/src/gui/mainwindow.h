@@ -58,7 +58,7 @@ private:
     std::mutex current_img_mutex;
 
     // File Storage
-    ml_cam::FileStorage fs;
+    gict_video_conf::FileStorage fs;
 
 
     QGraphicsPixmapItem pixmap;

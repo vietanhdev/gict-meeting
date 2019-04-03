@@ -45,7 +45,15 @@ find_package( Threads )
 include_directories(
     "src"
     "src/utilities"
+
     "src/services"
+    "src/services/data_types"
+    "src/services/protocols"
+    "src/services/receiver"
+    "src/services/sender"
+    "src/services/stream"
+    "src/services/video"
+
     "src/gui"
     "src/gui/framelesswindow"
     ${SDL2_INCLUDE_DIRS}
@@ -75,9 +83,17 @@ add_executable(${PROJECT_NAME}
     "src/gui/new_conference_wizard.cpp"
     "src/gui/new_conference_wizard.ui"
 
-    "src/services/conference.cpp"
-    "src/services/participant.cpp"
-    "src/services/stream_service.cpp"
+    "src/services/data_types/conference.cpp"
+    "src/services/data_types/participant.cpp"
+
+    "src/services/stream/stream_service.cpp"
+
+    "src/services/protocols/basic_protocol.cpp"
+    "src/services/receiver/receiver_socket.cpp"
+    "src/services/sender/sender_socket.cpp"
+
+    "src/services/video/video_capture.cpp"
+    "src/services/video/video_frame.cpp"
 )
 
 ADD_LIBRARY(

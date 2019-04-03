@@ -1,7 +1,7 @@
 #include "utility.h"
 
 
-namespace ml_cam {
+namespace gict_video_conf {
 
 // Define Microsoft functions and data types to use in other platform
 #if !defined(_WIN32)
@@ -104,4 +104,4 @@ cv::Mat QImage2Mat(QImage const &src) {
     return result;
 }
 
-}  // namespace ml_cam
+}  // namespace gict_video_conf

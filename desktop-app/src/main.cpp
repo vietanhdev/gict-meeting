@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
     // Init file storage
-    ml_cam::FileStorage fs;
+    gict_video_conf::FileStorage fs;
     fs.initStorage();
 
     // Style our application with custom dark style

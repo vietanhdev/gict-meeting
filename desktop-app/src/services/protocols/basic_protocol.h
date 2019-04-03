@@ -9,8 +9,6 @@
 #include "protocols/protocol.h"
 #include "video/video_frame.h"
 
-namespace udp_streaming_video {
-
 class BasicProtocolData : public ProtocolData {
    public:
     std::vector<unsigned char> PackageData() const override;
@@ -27,7 +25,5 @@ class BasicProtocolData : public ProtocolData {
     // The video frame received from the packet is stored here.
     VideoFrame video_frame_;
 };
-
-}  // namespace udp_streaming_video
 
 #endif  // PROTOCOLS_BASIC_PROTOCOL_H

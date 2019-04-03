@@ -6,7 +6,6 @@
 #include <string>
 #include <vector>
 
-namespace udp_streaming_video {
 
 class SenderSocket {
 
@@ -25,7 +24,5 @@ class SenderSocket {
     sockaddr_in receiver_addr_;
 
 };  // SenderSocket
-
-}  // namespace udp_streaming_video
 
 #endif  // SENDER_SOCKET_H

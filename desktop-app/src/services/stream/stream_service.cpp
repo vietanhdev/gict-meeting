@@ -1,10 +1,6 @@
 
 #include "stream_service.h"
 
-using udp_streaming_video::BasicProtocolData;
-using udp_streaming_video::SenderSocket;
-using udp_streaming_video::VideoCapture;
-
 StreamService::StreamService() {}
 
 void StreamService::upStreamingThread() {

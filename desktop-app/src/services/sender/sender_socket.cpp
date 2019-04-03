@@ -8,8 +8,6 @@
 #include <string>
 #include <vector>
 
-namespace udp_streaming_video {
-
 SenderSocket::SenderSocket() {}
 
 void SenderSocket::init(const std::string &receiver_ip, const int receiver_port) {
@@ -29,5 +27,3 @@ void SenderSocket::sendPacket(const std::vector<unsigned char> &data) const {
                reinterpret_cast<const sockaddr *>(&receiver_addr_)),
            sizeof(receiver_addr_));
 }
-
-}  // namespace udp_streaming_video

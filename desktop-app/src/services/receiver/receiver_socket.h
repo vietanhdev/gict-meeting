@@ -5,8 +5,8 @@
 // BindSocketToListen() to bind the socket. If that method returns true, you can
 // call GetPacket() to get incoming packets from the network.
 
-#ifndef SRC_RECEIVER_RECEIVER_SOCKET_H_
-#define SRC_RECEIVER_RECEIVER_SOCKET_H_
+#ifndef RECEIVER_SOCKET_H
+#define RECEIVER_SOCKET_H
 
 #include <vector>
 
@@ -45,4 +45,4 @@ class ReceiverSocket {
 
 }  // namespace udp_streaming_video
 
-#endif  // SRC_RECEIVER_RECEIVER_SOCKET_H_
+#endif  // RECEIVER_SOCKET_H

@@ -2,8 +2,8 @@
 // raw bytes. The bytes are turned the appropriate variables, which are stored
 // in the binary packet data according by the specific protocol.
 
-#ifndef SRC_PROTOCOLS_PROTOCOL_H_
-#define SRC_PROTOCOLS_PROTOCOL_H_
+#ifndef PROTOCOLS_PROTOCOL_H
+#define PROTOCOLS_PROTOCOL_H
 
 #include <vector>
 
@@ -23,4 +23,4 @@ class ProtocolData {
 
 }  // namespace udp_streaming_video
 
-#endif  // SRC_PROTOCOLS_PROTOCOL_H_
+#endif  // PROTOCOLS_PROTOCOL_H

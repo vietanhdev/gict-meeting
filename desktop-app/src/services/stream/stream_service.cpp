@@ -10,7 +10,7 @@ StreamService::StreamService() {}
 void StreamService::upStreamingThread() {
 
     SenderSocket socket;
-    VideoCapture video_capture(false, 10);
+    VideoCapture video_capture(false, 0.5);
     BasicProtocolData protocol_data;
 
     for (;;) {

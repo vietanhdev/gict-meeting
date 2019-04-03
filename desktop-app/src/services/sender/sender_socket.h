@@ -1,5 +1,5 @@
-#ifndef SENDER_SOCKET_H_
-#define SENDER_SOCKET_H_
+#ifndef SENDER_SOCKET_H
+#define SENDER_SOCKET_H
 
 #include <arpa/inet.h>
 
@@ -28,4 +28,4 @@ class SenderSocket {
 
 }  // namespace udp_streaming_video
 
-#endif  // SENDER_SOCKET_H_
+#endif  // SENDER_SOCKET_H

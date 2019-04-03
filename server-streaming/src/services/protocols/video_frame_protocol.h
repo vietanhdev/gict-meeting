@@ -17,24 +17,25 @@ class VideoFrameProtocolData : public ProtocolData {
 
     // Return true if unpack successfully
     // Otherwise return false
-    bool unpackData(const std::vector<unsigned char>& raw_bytes) override;
+    bool unpackHeader(const std::vector<unsigned char>& raw_bytes) override;
 
-    // Sets the next video frame.
-    void setImage(const VideoFrame& image) { video_frame_ = image; }
+    void unpackData( const std::vector<unsigned char>& raw_bytes, std::vector<unsigned char>& data );
 
-    // Returns the video frame image.
-    VideoFrame getImage() const { return video_frame_; }
-
-   // Return client id of video frame (Who sent this frame?)
+    // Return client id of packet (Who sent this packet?)
     unsigned char getClientId() const;
 
     int getClientAuthKey() const;
 
+    // Return message of packet
+    unsigned char getMessage() const;
+
+    const std::vector<unsigned char>& getHeaderData() const;
+
    private:
     unsigned char client_id;
     int client_auth_key;
-    // The video frame received from the packet is stored here.
-    VideoFrame video_frame_;
+    unsigned char message;
+    std::vector<unsigned char> header_data;
 
 
 };

@@ -15,7 +15,7 @@ class ProtocolData {
 
     // Unpacks a received data buffer into the appropriate variables, in
     // accordance to the specific protocol being implemented.
-    virtual bool unpackData(const std::vector<unsigned char>& raw_bytes) = 0;
+    virtual bool unpackHeader(const std::vector<unsigned char>& raw_bytes) = 0;
 };
 
 #endif  // PROTOCOLS_PROTOCOL_H

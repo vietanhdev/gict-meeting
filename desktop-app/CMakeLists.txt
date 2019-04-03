@@ -40,6 +40,8 @@ add_definitions(${Qt5Widgets_DEFINITIONS})
 # without -fPIE. We add that here.
 set(CMAKE_CXX_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
 
+find_package( Threads )
+
 include_directories(
     "src"
     "src/utilities"
@@ -75,6 +77,7 @@ add_executable(${PROJECT_NAME}
 
     "src/services/conference.cpp"
     "src/services/participant.cpp"
+    "src/services/stream_service.cpp"
 )
 
 ADD_LIBRARY(
@@ -96,7 +99,7 @@ set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 add_subdirectory(src/yaml_cpp)
 
 # link required libs
-target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp)
+target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp ${CMAKE_THREAD_LIBS_INIT})
 
 # Copy files
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

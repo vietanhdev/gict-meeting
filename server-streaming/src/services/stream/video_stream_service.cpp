@@ -45,6 +45,9 @@ void VideoStreamService::videoDownServiceListening() {
 
         // When client request image stream, update client address in participant
         if (protocol_data.getMessage() == Message::REQUEST_IMAGE_STREAM) {
+
+            std::cout << "Client requested image stream. Client id = " << protocol_data.getClientId() << std::endl;
+
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
                 conference.connectClient(protocol_data.getClientId(), socket->getPacket().client_addr);
@@ -68,6 +71,8 @@ void VideoStreamService::videoDownServiceSending() {
 
             // Send video to client if connected
             if (participants[i].isConnected()) {
+
+                std::cout << "Send back to client" << std::endl;
 
                 std::vector<unsigned char> message = protocol_data.packageData(participants[i].getClientId(), participants[i].getImage());
                 socket->sendPackage(participants[i].getClientAddress(), message);

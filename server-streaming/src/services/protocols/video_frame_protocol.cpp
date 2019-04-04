@@ -37,7 +37,7 @@ std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char cli
 // Otherwise return false
 bool VideoFrameProtocolData::unpackHeader( const std::vector<unsigned char>& raw_bytes) {
     // Corrupted package
-    if (raw_bytes.size() <= 16) {
+    if (raw_bytes.size() < 16) {
         std::cerr << "Too short packet. " << raw_bytes.size() << std::endl;
         return false;
     }

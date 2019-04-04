@@ -67,6 +67,8 @@ void VideoStreamService::downStreamingThread() {
                 // Send stream request message
                 socket.sendPacket(protocol_data.packageStreamRequestMessage());
 
+                std::cout << "Requesting video streaming from server" << std::endl;
+
             } else { // Stop streaming
 
                 // Destroy socket connection to the server

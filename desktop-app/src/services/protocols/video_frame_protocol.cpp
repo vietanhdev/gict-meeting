@@ -62,7 +62,7 @@ std::vector<unsigned char> VideoFrameProtocolData::packageStreamRequestMessage()
 cv::Mat VideoFrameProtocolData::unpackConferenceFrame( const std::vector<unsigned char>& raw_bytes) {
     cv::Mat frame;
 
-    if (raw_bytes.size() <= 16) {
+    if (raw_bytes.size() < 16) {
         std::cerr << "Too short packet. " << raw_bytes.size() << std::endl;
         return frame;
     }

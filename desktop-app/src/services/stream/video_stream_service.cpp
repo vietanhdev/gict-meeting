@@ -48,7 +48,6 @@ void VideoStreamService::upStreamingThread() {
                 std::cerr << "Could not get image from camera" << std::endl;
                 continue;
             }
-            std::cout << "Pack size = " << protocol_data.packageClientFrame(image).size() << std::endl;
             socket.sendPacket(protocol_data.packageClientFrame(image));
         }
 

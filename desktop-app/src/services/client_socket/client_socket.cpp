@@ -33,39 +33,42 @@ void ClientSocket::destroy() {
 }
 
 void ClientSocket::sendPacket(const std::vector<unsigned char> &data) const {
-    sendto(socket_handle_, data.data(), data.size(), 0,
+    int result = sendto(socket_handle_, data.data(), data.size(), 0,
            const_cast<sockaddr *>(
                reinterpret_cast<const sockaddr *>(&server_addr_)),
            sizeof(server_addr_));
 
-    switch(errno){
-        case EFAULT:
-            printf("Invalid user space address.\n");
-            break;
-        case EBADF:
-            printf("Invalid descriptor.\n");
-            break;
-        case EINVAL:
-            printf("Invalid argument.\n");
-            break;
-        case EDESTADDRREQ:
-            printf("No Peer address.\n");
-            break;
-        case EISCONN:
-            printf("Connection mode socket.\n");
-            break;
-        case ENOTSOCK:
-            printf("The given socket is not a socket.\n");
-            break;
-        case ENOTCONN:
-            printf("No Target.\n");
-            break;
-        case ENOBUFS:
-            printf("Network output is full.\n");
-            break;
-        default:
-            printf("No spezific error.\n");
+    if (result == -1) {
+        switch(errno){
+            case EFAULT:
+                printf("Invalid user space address.\n");
+                break;
+            case EBADF:
+                printf("Invalid descriptor.\n");
+                break;
+            case EINVAL:
+                printf("Invalid argument.\n");
+                break;
+            case EDESTADDRREQ:
+                printf("No Peer address.\n");
+                break;
+            case EISCONN:
+                printf("Connection mode socket.\n");
+                break;
+            case ENOTSOCK:
+                printf("The given socket is not a socket.\n");
+                break;
+            case ENOTCONN:
+                printf("No Target.\n");
+                break;
+            case ENOBUFS:
+                printf("Network output is full.\n");
+                break;
+            default:
+                printf("No spezific error.\n");
+        }
     }
+    
 }
 
 

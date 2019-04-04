@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <sys/types.h> 
 
 #include <iostream>
 #include <string>
@@ -15,6 +16,11 @@ void ClientSocket::init(const std::string &receiver_ip, const int receiver_port)
     server_addr_.sin_family = AF_INET;
     server_addr_.sin_port = htons(receiver_port);
     server_addr_.sin_addr.s_addr = inet_addr(receiver_ip.c_str());
+
+    struct timeval read_timeout;
+    read_timeout.tv_sec = 0;
+    read_timeout.tv_usec = 10;
+    setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
 }
 
 void ClientSocket::destroy() {

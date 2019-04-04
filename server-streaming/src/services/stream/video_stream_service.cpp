@@ -11,7 +11,14 @@ void VideoStreamService::videoUpService() {
 
     VideoFrameProtocolData protocol_data;
     while (true) {
-        protocol_data.unpackHeader(socket->getPacket().data);
+
+        std::vector<unsigned char> data = socket->getPacket().data;
+
+        if (data.empty()) {
+            continue;
+        }
+
+        protocol_data.unpackHeader(data);
 
         // Wrong format
         if (protocol_data.getMessage() != Message::CLIENT_FRAME) {
@@ -21,9 +28,9 @@ void VideoStreamService::videoUpService() {
 
         // Authentication
         if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey())) {
-            std::vector<unsigned char> data;
-            protocol_data.unpackData(socket->getPacket().data, data);
-            VideoFrame video_frame(data);
+            std::vector<unsigned char> payload_data;
+            protocol_data.unpackData(data, payload_data);
+            VideoFrame video_frame(payload_data);
             conference.setImage(protocol_data.getClientId(), video_frame.getImage());
             video_frame.display();
         }
@@ -40,13 +47,19 @@ void VideoStreamService::videoDownServiceListening() {
 
     VideoFrameProtocolData protocol_data;
     while (true) {
-        
-        protocol_data.unpackHeader(socket->getPacket().data); 
+
+        std::vector<unsigned char> data = socket->getPacket().data;
+
+        if (data.empty()) {
+            continue;
+        }
+
+        protocol_data.unpackHeader(data); 
 
         // When client request image stream, update client address in participant
         if (protocol_data.getMessage() == Message::REQUEST_IMAGE_STREAM) {
 
-            std::cout << "Client requested image stream. Client id = " << protocol_data.getClientId() << std::endl;
+            std::cout << "Client requested image stream. Client id = " << static_cast<int>(protocol_data.getClientId()) << std::endl;
 
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
@@ -54,6 +67,8 @@ void VideoStreamService::videoDownServiceListening() {
             }
         }
 
+        
+        
     }
 
 }
@@ -65,21 +80,19 @@ void VideoStreamService::videoDownServiceSending() {
 
     VideoFrameProtocolData protocol_data;
     while (true) {
-        std::vector<Participant>& participants = conference.getParticipants();
-
-        for (int i = 0; i > participants.size(); ++i) {
+      
+        for (int i = 0; i < conference.participants.size(); ++i) {
 
             // Send video to client if connected
-            if (participants[i].isConnected()) {
+            if (conference.participants[i].isConnected()) {
 
-                std::cout << "Send back to client" << std::endl;
-
-                std::vector<unsigned char> message = protocol_data.packageData(participants[i].getClientId(), participants[i].getImage());
-                socket->sendPackage(participants[i].getClientAddress(), message);
+                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), conference.participants[i].getImage());
+                socket->sendPackage(conference.participants[i].getClientAddress(), message);
 
             }
 
         }
+
 
     }
 }

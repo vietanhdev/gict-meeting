@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/types.h> 
 
 #include <iostream>
 #include <vector>
@@ -10,6 +11,10 @@
 
 ServerSocket::ServerSocket(const int port_number) : port_(port_number) {
     socket_handle_ = socket(AF_INET, SOCK_DGRAM, 0);
+    struct timeval read_timeout;
+    read_timeout.tv_sec = 0;
+    read_timeout.tv_usec = 10;
+    setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
 }
 
 const bool ServerSocket::bindSocketToListen() const {

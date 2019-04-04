@@ -62,7 +62,7 @@ void Conference::connectClient(unsigned char client_id, struct sockaddr_in clien
         if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
             participants[i].setClientAddress(client_addr);
             return;
-        } 
+        }
     }
 }
 

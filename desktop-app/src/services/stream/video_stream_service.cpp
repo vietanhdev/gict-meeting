@@ -66,6 +66,7 @@ void VideoStreamService::downStreamingThread() {
 
                 // Send stream request message
                 socket.sendPacket(protocol_data.packageStreamRequestMessage());
+                
 
                 std::cout << "Requesting video streaming from server" << std::endl;
 
@@ -82,6 +83,11 @@ void VideoStreamService::downStreamingThread() {
         //Streaming
         if (new_streaming_status) {
             std::vector<unsigned char> data = socket.getPacket();
+
+            if (data.empty()) {
+                continue;
+            }
+
             cv::Mat img = protocol_data.unpackConferenceFrame(data);
 
             if (img.empty()) {
@@ -91,6 +97,7 @@ void VideoStreamService::downStreamingThread() {
 
             cv::imshow("TEST", img);
             cv::waitKey(1);
+            
         }
 
     }

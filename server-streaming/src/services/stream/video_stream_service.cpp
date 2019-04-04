@@ -32,7 +32,7 @@ void VideoStreamService::videoUpService() {
             protocol_data.unpackData(data, payload_data);
             VideoFrame video_frame(payload_data);
             conference.setImage(protocol_data.getClientId(), video_frame.getImage());
-            video_frame.display();
+            // video_frame.display();
         }
 
     }

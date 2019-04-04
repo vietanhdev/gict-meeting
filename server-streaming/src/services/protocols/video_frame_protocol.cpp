@@ -59,6 +59,10 @@ bool VideoFrameProtocolData::unpackHeader( const std::vector<unsigned char>& raw
 // Return true if unpack successfully
 // Otherwise return false
 void VideoFrameProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes, std::vector<unsigned char>& data ) {
+    if (raw_bytes.size() <= 16) {
+        data.clear();
+        return;
+    }
     // Extract frame data
     std::vector<unsigned char>::const_iterator first = raw_bytes.begin() + 16;
     std::vector<unsigned char>::const_iterator last = raw_bytes.end();

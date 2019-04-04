@@ -36,8 +36,8 @@ void VideoStreamService::upStreamingThread() {
         }
 
         if (new_streaming_status) {
-            protocol_data.setImage(video_capture.getFrameFromCamera());
-            socket.sendPacket(protocol_data.packageData());
+            cv::Mat image = video_capture.getFrameFromCamera().getImage();
+            socket.sendPacket(protocol_data.packageClientFrame(image));
         }
 
     }
@@ -46,7 +46,50 @@ void VideoStreamService::upStreamingThread() {
 
 void VideoStreamService::downStreamingThread() {
 
+    ClientSocket socket;
+    VideoFrameProtocolData protocol_data;
     for (;;) {
+        VideoStreamService &streaming_service = VideoStreamService::instance();
+        bool streaming = streaming_service.isStreaming();
+        bool new_streaming_status = streaming_service.streaming_signal_flag;
+        if (new_streaming_status != streaming) {
+            if (new_streaming_status == true) { // Start streaming
+
+                // Get up port
+                int port = Conference::instance().getVideoDownPort();
+
+                // Server ip addresss
+                std::string ip_address = Conference::instance().getServerIp();
+
+                // Init a socket to the server
+                socket.init(ip_address, port);
+
+                // Send stream request message
+                socket.sendPacket(protocol_data.packageStreamRequestMessage());
+
+            } else { // Stop streaming
+
+                // Destroy socket connection to the server
+                socket.destroy();
+
+            }
+
+            streaming_service.streaming = new_streaming_status;
+        }
+
+        //Streaming
+        if (new_streaming_status) {
+            std::vector<unsigned char> data = socket.getPacket();
+            cv::Mat img = protocol_data.unpackConferenceFrame(data);
+
+            if (img.empty()) {
+                std::cout << "Could not parse stream from server." << std::endl;
+                continue;
+            }
+
+            cv::imshow("TEST", img);
+            cv::waitKey(1);
+        }
 
     }
 }

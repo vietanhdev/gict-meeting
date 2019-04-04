@@ -60,7 +60,8 @@ class VideoStreamService {
 
     public:
         static void videoUpService();
-        static void videoDownService();
+        static void videoDownServiceListening();
+        static void videoDownServiceSending();
 
 };
 

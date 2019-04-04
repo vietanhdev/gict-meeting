@@ -31,6 +31,9 @@ class ReceiverSocket {
     // Waits for the next packet on the given port, and returns a packet: client address and data as a vector of bytes
     const Packet getPacket() const;
 
+    // Send package to client
+    int sendPackage(sockaddr_in receiver_addr_, const std::vector<unsigned char> &data);
+
    private:
     // This buffer will be used to collect incoming packet data. It is only used
     // in the GetPacket() method.

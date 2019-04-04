@@ -68,6 +68,12 @@ class Participant {
             image = img.clone();
         }
 
+
+        bool isConnected() {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            return connected;
+        }
+
         Participant(unsigned char client_id, std::string name, int auth_key);
 
 };

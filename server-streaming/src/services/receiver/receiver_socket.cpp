@@ -57,3 +57,13 @@ const Packet ReceiverSocket::getPacket() const {
 
     return packet;
 }
+
+
+int ReceiverSocket::sendPackage(sockaddr_in receiver_addr_, const std::vector<unsigned char> &data) {
+
+    return sendto(socket_handle_, data.data(), data.size(), 0,
+        const_cast<sockaddr *>(
+            reinterpret_cast<const sockaddr *>(&receiver_addr_)),
+        sizeof(receiver_addr_));
+
+}

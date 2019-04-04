@@ -2,9 +2,33 @@
 
 #include <vector>
 
+
 std::vector<unsigned char> VideoFrameProtocolData::packageData() const {
     std::vector<unsigned char> message;
     return message;
+}
+
+
+std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char client_id, const cv::Mat & img) const {
+
+    VideoFrame video_frame(img);
+
+    std::vector<unsigned char> message = video_frame.getJPEG();
+
+    // 14 dummy bytes
+    // May be used in the future for frame data
+    for (int i = 0; i < 14; ++i) {
+        message.insert(message.begin(), 0);
+    }
+
+    // Insert client id
+    message.insert(message.begin(), client_id);
+
+    // Insert message type
+    message.insert(message.begin(), Message::CONFERENCE_FRAME);
+
+    return message;
+
 }
 
 

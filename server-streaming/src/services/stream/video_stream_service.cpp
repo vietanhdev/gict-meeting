@@ -69,10 +69,8 @@ void VideoStreamService::videoDownServiceSending() {
             // Send video to client if connected
             if (participants[i].isConnected()) {
 
-                // cvprotocol_data.packageImage()
-
-                // // Temporary: Send client video back to them
-                // socket->send
+                std::vector<unsigned char> message = protocol_data.packageData(participants[i].getClientId(), participants[i].getImage());
+                socket->sendPackage(participants[i].getClientAddress(), message);
 
             }
 

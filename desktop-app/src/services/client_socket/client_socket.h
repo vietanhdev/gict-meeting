@@ -32,6 +32,9 @@ class ClientSocket {
     // in the GetPacket() method.
     char buffer_[kMaxPacketBufferSize];
 
+    std::string receiver_ip;
+    int receiver_port;
+
 };  // ClientSocket
 
 #endif  // client_socket_H

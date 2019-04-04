@@ -1,0 +1,12 @@
+conference_name: "Daily Conference"
+secret_key: "123456"
+
+server_ip: "127.0.0.1"
+video_up_port: "8881"
+video_down_port: "8882"
+audio_up_port: "8883"
+audio_down_port: "8884"
+
+client_id: "1"
+client_name: "Group2"
+client_auth_key: "243235"

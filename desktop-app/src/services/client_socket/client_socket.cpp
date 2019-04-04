@@ -9,6 +9,8 @@
 #include <string>
 #include <vector>
 
+#include "errno.h"
+
 ClientSocket::ClientSocket() {}
 
 void ClientSocket::init(const std::string &receiver_ip, const int receiver_port) {
@@ -21,6 +23,9 @@ void ClientSocket::init(const std::string &receiver_ip, const int receiver_port)
     read_timeout.tv_sec = 0;
     read_timeout.tv_usec = 10;
     setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
+
+    this->receiver_ip = receiver_ip;
+    this->receiver_port = receiver_port;
 }
 
 void ClientSocket::destroy() {
@@ -32,6 +37,35 @@ void ClientSocket::sendPacket(const std::vector<unsigned char> &data) const {
            const_cast<sockaddr *>(
                reinterpret_cast<const sockaddr *>(&server_addr_)),
            sizeof(server_addr_));
+
+    switch(errno){
+        case EFAULT:
+            printf("Invalid user space address.\n");
+            break;
+        case EBADF:
+            printf("Invalid descriptor.\n");
+            break;
+        case EINVAL:
+            printf("Invalid argument.\n");
+            break;
+        case EDESTADDRREQ:
+            printf("No Peer address.\n");
+            break;
+        case EISCONN:
+            printf("Connection mode socket.\n");
+            break;
+        case ENOTSOCK:
+            printf("The given socket is not a socket.\n");
+            break;
+        case ENOTCONN:
+            printf("No Target.\n");
+            break;
+        case ENOBUFS:
+            printf("Network output is full.\n");
+            break;
+        default:
+            printf("No spezific error.\n");
+    }
 }
 
 

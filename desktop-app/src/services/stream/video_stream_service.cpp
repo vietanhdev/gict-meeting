@@ -6,8 +6,15 @@ VideoStreamService::VideoStreamService() {}
 void VideoStreamService::upStreamingThread() {
 
     ClientSocket socket;
-    VideoCapture video_capture(false, 0.5);
+    VideoCapture video_capture(false, 1);
     VideoFrameProtocolData protocol_data;
+
+    // Get up port
+    int port = Conference::instance().getVideoUpPort();
+    // Server ip addresss
+    std::string ip_address = Conference::instance().getServerIp();
+    // Init a socket to the server
+    socket.init(ip_address, port);
 
     for (;;) {
         VideoStreamService &streaming_service = VideoStreamService::instance();
@@ -37,6 +44,11 @@ void VideoStreamService::upStreamingThread() {
 
         if (new_streaming_status) {
             cv::Mat image = video_capture.getFrameFromCamera().getImage();
+            if (image.empty()) {
+                std::cerr << "Could not get image from camera" << std::endl;
+                continue;
+            }
+            std::cout << "Pack size = " << protocol_data.packageClientFrame(image).size() << std::endl;
             socket.sendPacket(protocol_data.packageClientFrame(image));
         }
 
@@ -91,7 +103,7 @@ void VideoStreamService::downStreamingThread() {
             cv::Mat img = protocol_data.unpackConferenceFrame(data);
 
             if (img.empty()) {
-                std::cout << "Could not parse stream from server." << std::endl;
+                // std::cout << "Could not parse stream from server." << std::endl;
                 continue;
             }
 

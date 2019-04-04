@@ -49,6 +49,9 @@ void VideoStreamService::upStreamingThread() {
                 continue;
             }
             socket.sendPacket(protocol_data.packageClientFrame(image));
+            Conference::instance().setClientCamFrame(image);
+            emit VideoStreamService::instance().newClientCamFrame();
+
         }
 
     }

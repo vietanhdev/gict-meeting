@@ -51,7 +51,8 @@ private slots:
     void newConference();
     void startConference();
     void updateConferenceFrame();
-    
+    void updateClientCamFrame();
+
 private:
     Ui::MainWindow *ui;
 
@@ -65,7 +66,8 @@ private:
     gict_video_conf::FileStorage fs;
 
 
-    QGraphicsPixmapItem pixmap;
+    QGraphicsPixmapItem conference_pixmap;
+    QGraphicsPixmapItem client_cam_pixmap;
     cv::VideoCapture video;
 
 

@@ -31,7 +31,5 @@ int main(int argc, char *argv[]) {
     framelessWindow.setContent(&mainWindow);
     framelessWindow.show();
 
-    // std::thread update_conf_frame_t(MainWindow::threadUpdateConferenceFrame);
-
     return a.exec();
 }

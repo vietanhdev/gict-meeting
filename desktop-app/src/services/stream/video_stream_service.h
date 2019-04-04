@@ -66,6 +66,7 @@ class VideoStreamService: public QObject {
 
     signals:
         void newConferenceFrame();
+        void newClientCamFrame();
 };
 
 #endif

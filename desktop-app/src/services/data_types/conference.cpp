@@ -101,12 +101,21 @@ int Conference::getClientAuthKey() {
 
 
 void Conference::setConferenceFrame(const cv::Mat &img) {
-    std::lock_guard<std::mutex> lock(global_mutex);
+    std::lock_guard<std::mutex> lock(conference_frame_mutex);
     conference_frame = img;
 }
 cv::Mat Conference::getConferenceFrame() {
-    std::lock_guard<std::mutex> lock(global_mutex);
+    std::lock_guard<std::mutex> lock(conference_frame_mutex);
     return this->conference_frame.clone();
+}
+
+void Conference::setClientCamFrame(const cv::Mat &img) {
+    std::lock_guard<std::mutex> lock(client_cam_frame_mutex);
+    client_cam_frame = img;
+}
+cv::Mat Conference::getClientCamFrame() {
+    std::lock_guard<std::mutex> lock(client_cam_frame_mutex);
+    return this->client_cam_frame.clone();
 }
 
 

@@ -24,7 +24,11 @@ class Conference {
         int audio_down_port;
 
         // Conference image
+        std::mutex conference_frame_mutex;
         cv::Mat conference_frame;
+
+        std::mutex client_cam_frame_mutex;
+        cv::Mat client_cam_frame;
 
         // Client
         unsigned char client_id;
@@ -83,6 +87,9 @@ class Conference {
 
         void setConferenceFrame(const cv::Mat &img);
         cv::Mat getConferenceFrame();
+
+        void setClientCamFrame(const cv::Mat &img);
+        cv::Mat getClientCamFrame();
 
         void addParticipant(Participant p);
 

@@ -7,7 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     ui->conferenceView->setScene(new QGraphicsScene(this));
-    ui->conferenceView->scene()->addItem(&pixmap);
+    ui->conferenceView->scene()->addItem(&conference_pixmap);
+
+    ui->clientCamView->setScene(new QGraphicsScene(this));
+    ui->clientCamView->scene()->addItem(&client_cam_pixmap);
 
     new_conf_wizard = std::make_shared<NewConferenceWizard>();
     // Connect finish signal from Conference Wizard
@@ -21,9 +24,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cameraSelector, SIGNAL(activated(int)), this,
             SLOT(cameraSelector_activated()));
 
-    // Update conference frame signal
+    // Update frames signal
     connect(&VideoStreamService::instance(), SIGNAL(newConferenceFrame()), this,
             SLOT(updateConferenceFrame()));
+
+    connect(&VideoStreamService::instance(), SIGNAL(newClientCamFrame()), this,
+            SLOT(updateClientCamFrame()));
 
 
     refreshCams();
@@ -74,7 +80,6 @@ void MainWindow::newConference() {
 }
 
 
-
 void MainWindow::startConference() {
     ui->startStopBtn->setText("Leave Conference");
 }
@@ -112,8 +117,19 @@ void MainWindow::updateConferenceFrame() {
     QImage qimg(frame.data, static_cast<int>(frame.cols),
                 static_cast<int>(frame.rows),
                 static_cast<int>(frame.step), QImage::Format_RGB888);
-    pixmap.setPixmap(QPixmap::fromImage(qimg.rgbSwapped()));
-    ui->conferenceView->fitInView(&pixmap, Qt::KeepAspectRatio);
+    conference_pixmap.setPixmap(QPixmap::fromImage(qimg.rgbSwapped()));
+    ui->conferenceView->fitInView(&conference_pixmap, Qt::KeepAspectRatio);
+}
+
+void MainWindow::updateClientCamFrame() {
+    Conference &conference = Conference::instance();
+    cv::Mat frame = conference.getClientCamFrame();
+    // ### Show current image
+    QImage qimg(frame.data, static_cast<int>(frame.cols),
+                static_cast<int>(frame.rows),
+                static_cast<int>(frame.step), QImage::Format_RGB888);
+    client_cam_pixmap.setPixmap(QPixmap::fromImage(qimg.rgbSwapped()));
+    ui->clientCamView->fitInView(&client_cam_pixmap, Qt::KeepAspectRatio);
 }
 
 

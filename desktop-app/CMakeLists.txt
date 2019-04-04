@@ -90,7 +90,7 @@ add_executable(${PROJECT_NAME}
 
     "src/services/protocols/basic_protocol.cpp"
     "src/services/receiver/receiver_socket.cpp"
-    "src/services/sender/sender_socket.cpp"
+    "src/services/sender/client_socket.cpp"
 
     "src/services/video/video_capture.cpp"
     "src/services/video/video_frame.cpp"

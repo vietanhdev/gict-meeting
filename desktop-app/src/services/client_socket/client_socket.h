@@ -1,5 +1,5 @@
-#ifndef SENDER_SOCKET_H
-#define SENDER_SOCKET_H
+#ifndef CLIENT_SOCKET_H
+#define CLIENT_SOCKET_H
 
 #include <arpa/inet.h>
 
@@ -7,10 +7,10 @@
 #include <vector>
 
 
-class SenderSocket {
+class ClientSocket {
 
    public:
-    SenderSocket();
+    ClientSocket();
     void init(const std::string &receiver_ip, const int receiver_port);
     void destroy();
     void sendPacket(const std::vector<unsigned char> &data) const;
@@ -23,6 +23,6 @@ class SenderSocket {
     // in the constructor.
     sockaddr_in receiver_addr_;
 
-};  // SenderSocket
+};  // ClientSocket
 
-#endif  // SENDER_SOCKET_H
+#endif  // client_socket_H

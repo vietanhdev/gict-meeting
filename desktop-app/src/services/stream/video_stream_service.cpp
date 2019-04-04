@@ -5,7 +5,7 @@ VideoStreamService::VideoStreamService() {}
 
 void VideoStreamService::upStreamingThread() {
 
-    SenderSocket socket;
+    ClientSocket socket;
     VideoCapture video_capture(false, 0.5);
     BasicProtocolData protocol_data;
 

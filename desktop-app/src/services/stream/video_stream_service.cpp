@@ -7,7 +7,7 @@ void VideoStreamService::upStreamingThread() {
 
     ClientSocket socket;
     VideoCapture video_capture(false, 0.5);
-    BasicProtocolData protocol_data;
+    VideoFrameProtocolData protocol_data;
 
     for (;;) {
         VideoStreamService &streaming_service = VideoStreamService::instance();

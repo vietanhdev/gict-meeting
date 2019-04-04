@@ -16,7 +16,7 @@
 #include <string>
 #include <vector>
 
-#include "basic_protocol.h"
+#include "video_frame_protocol.h"
 #include "client_socket.h"
 #include "video_capture.h"
 

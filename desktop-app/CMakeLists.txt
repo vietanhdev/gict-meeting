@@ -87,7 +87,7 @@ add_executable(${PROJECT_NAME}
 
     "src/services/stream/video_stream_service.cpp"
 
-    "src/services/protocols/basic_protocol.cpp"
+    "src/services/protocols/video_frame_protocol.cpp"
     "src/services/client_socket/client_socket.cpp"
 
     "src/services/video/video_capture.cpp"

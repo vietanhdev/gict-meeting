@@ -1,8 +1,8 @@
-#include "protocols/basic_protocol.h"
+#include "video_frame_protocol.h"
 
 #include <vector>
 
-std::vector<unsigned char> BasicProtocolData::packageData() const {
+std::vector<unsigned char> VideoFrameProtocolData::packageData() const {
     std::vector<unsigned char> message = video_frame_.getJPEG();
 
     // 10 dummy bytes
@@ -31,16 +31,16 @@ std::vector<unsigned char> BasicProtocolData::packageData() const {
 
 // Return true if unpack successfully
 // Otherwise return false
-bool BasicProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes) {
+bool VideoFrameProtocolData::unpackData( const std::vector<unsigned char>& raw_bytes) {
 
     
 }
 
 
-unsigned char BasicProtocolData::getClientId() const {
+unsigned char VideoFrameProtocolData::getClientId() const {
     return client_id;
 }
 
-int BasicProtocolData::getClientAuthKey() const {
+int VideoFrameProtocolData::getClientAuthKey() const {
     return client_auth_key;
 }

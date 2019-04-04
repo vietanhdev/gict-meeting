@@ -10,6 +10,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QShortcut>
+#include <QGraphicsScene>
 
 #include <SDL.h>
 
@@ -33,13 +34,15 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    static auto& instance(){
+        static MainWindow main_window;
+        return main_window;
+    }
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void showCam();
 
 protected:
     void closeEvent(QCloseEvent *event);
-    void loadEffects();
 
 private slots:
     void cameraSelector_activated();
@@ -47,6 +50,7 @@ private slots:
     void refreshCams();
     void newConference();
     void startConference();
+    void updateConferenceFrame();
     
 private:
     Ui::MainWindow *ui;
@@ -77,7 +81,6 @@ public:
     void setCurrentImage(const cv::Mat & img);
     cv::Mat getCurrentImage();
     void playShutter();
-
 };
 
 #endif // MAINWINDOW_H

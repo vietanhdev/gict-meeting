@@ -24,7 +24,9 @@ constexpr int kJPEGQuality = 25;
 }  // namespace
 
 VideoFrame::VideoFrame(const std::vector<unsigned char> frame_bytes) {
-    frame_image_ = cv::imdecode(frame_bytes, cv::IMREAD_COLOR);
+    if (!frame_bytes.empty()) {
+        frame_image_ = cv::imdecode(frame_bytes, cv::IMREAD_COLOR);
+    }
 }
 
 void VideoFrame::display() const {
@@ -40,7 +42,9 @@ std::vector<unsigned char> VideoFrame::getJPEG() const {
     const std::vector<int> compression_params = {cv::IMWRITE_JPEG_QUALITY,
                                                  kJPEGQuality};
     std::vector<unsigned char> data_buffer;
-    cv::imencode(kJPEGExtension, frame_image_, data_buffer, compression_params);
+    if (!frame_image_.empty()) {
+        cv::imencode(kJPEGExtension, frame_image_, data_buffer, compression_params);
+    }
     return data_buffer;
 }
 

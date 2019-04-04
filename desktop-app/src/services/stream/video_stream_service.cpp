@@ -95,9 +95,9 @@ void VideoStreamService::downStreamingThread() {
                 continue;
             }
 
-            cv::imshow("TEST", img);
-            cv::waitKey(1);
-            
+            Conference::instance().setConferenceFrame(img);
+
+            emit VideoStreamService::instance().newConferenceFrame();
         }
 
     }

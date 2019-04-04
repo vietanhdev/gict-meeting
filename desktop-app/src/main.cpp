@@ -1,5 +1,6 @@
 #include <QApplication>
 #include <stdlib.h>
+#include <thread>
 #include <iostream>
 #include "filesystem_include.h"
 #include "framelesswindow.h"
@@ -20,16 +21,17 @@ int main(int argc, char *argv[]) {
 
     // Create frameless window (and set windowState or title)
     FramelessWindow framelessWindow;
-    framelessWindow.setWindowTitle("FaceCam");
+    framelessWindow.setWindowTitle("iCT Video Conference");
     framelessWindow.setWindowIcon(a.style()->standardIcon(QStyle::SP_DesktopIcon));
     
     // Create our mainwindow instance
-    MainWindow *mainWindow = new MainWindow;
+    MainWindow &mainWindow = MainWindow::instance();
 
     // Add the mainwindow to our custom frameless window
-    framelessWindow.setContent(mainWindow);
+    framelessWindow.setContent(&mainWindow);
     framelessWindow.show();
-    mainWindow->showCam();
+
+    // std::thread update_conf_frame_t(MainWindow::threadUpdateConferenceFrame);
 
     return a.exec();
 }

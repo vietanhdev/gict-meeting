@@ -5,6 +5,7 @@
 #include <vector>
 #include <mutex>
 #include <cstdlib>
+#include <opencv2/opencv.hpp>
 
 #include "participant.h"
 
@@ -21,6 +22,9 @@ class Conference {
         int video_down_port;
         int audio_up_port;
         int audio_down_port;
+
+        // Conference image
+        cv::Mat conference_frame;
 
         // Client
         unsigned char client_id;
@@ -76,6 +80,9 @@ class Conference {
         std::string getClientName();
         void setClientAuthKey(std::string);
         int getClientAuthKey();
+
+        void setConferenceFrame(const cv::Mat &img);
+        cv::Mat getConferenceFrame();
 
         void addParticipant(Participant p);
 

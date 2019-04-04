@@ -100,6 +100,16 @@ int Conference::getClientAuthKey() {
 }
 
 
+void Conference::setConferenceFrame(const cv::Mat &img) {
+    std::lock_guard<std::mutex> lock(global_mutex);
+    conference_frame = img;
+}
+cv::Mat Conference::getConferenceFrame() {
+    std::lock_guard<std::mutex> lock(global_mutex);
+    return this->conference_frame.clone();
+}
+
+
 void Conference::addParticipant(Participant p) {
     this->participants.push_back(p);
 }

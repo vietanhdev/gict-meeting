@@ -1,6 +1,8 @@
 #ifndef VIDEO_STREAM_SERVICE_H
 #define VIDEO_STREAM_SERVICE_H
 
+
+#include <QObject>
 #include <string>
 #include <vector>
 #include <mutex>
@@ -21,8 +23,9 @@
 #include "video_capture.h"
 
 
-class VideoStreamService {
+class VideoStreamService: public QObject {
 
+    Q_OBJECT
 
     public:
         static VideoStreamService& instance(){
@@ -60,6 +63,9 @@ class VideoStreamService {
 
         bool startStreaming();
         bool stopStreaming();
+
+    signals:
+        void newConferenceFrame();
 };
 
 #endif

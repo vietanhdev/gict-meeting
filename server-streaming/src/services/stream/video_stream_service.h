@@ -9,14 +9,14 @@
 
 #include "conference.h"
 #include "video_frame_protocol.h"
-#include "receiver_socket.h"
+#include "server_socket.h"
 
 
 class VideoStreamService {
 
     private:
-        std::shared_ptr<ReceiverSocket> video_up_socket;
-        std::shared_ptr<ReceiverSocket> video_down_socket;
+        std::shared_ptr<ServerSocket> video_up_socket;
+        std::shared_ptr<ServerSocket> video_down_socket;
 
     public:
         static VideoStreamService& instance(){
@@ -24,11 +24,11 @@ class VideoStreamService {
             return stream_service;
         }
 
-        std::shared_ptr<ReceiverSocket> getVideoUpSocket(){
+        std::shared_ptr<ServerSocket> getVideoUpSocket(){
             if (video_up_socket == nullptr) {
                 Conference &conference = Conference::instance();
                 const int port = conference.getVideoUpPort();
-                video_up_socket = std::make_shared<ReceiverSocket>(port);
+                video_up_socket = std::make_shared<ServerSocket>(port);
                 if (!video_up_socket->bindSocketToListen()) {
                     std::cerr << "Could not bind socket at port: " << conference.getVideoUpPort() << std::endl;
                     exit(1);
@@ -37,11 +37,11 @@ class VideoStreamService {
             return video_up_socket;
         }
 
-        std::shared_ptr<ReceiverSocket> getVideoDownSocket(){
+        std::shared_ptr<ServerSocket> getVideoDownSocket(){
             if (video_down_socket == nullptr) {
                 Conference &conference = Conference::instance();
                 const int port = conference.getVideoDownPort();
-                video_down_socket = std::make_shared<ReceiverSocket>(port);
+                video_down_socket = std::make_shared<ServerSocket>(port);
                 if (!video_down_socket->bindSocketToListen()) {
                     std::cerr << "Could not bind socket at port: " << conference.getVideoDownPort() << std::endl;
                     exit(1);

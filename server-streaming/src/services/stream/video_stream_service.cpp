@@ -7,7 +7,7 @@ void VideoStreamService::videoUpService() {
 
     Conference &conference = Conference::instance();
 
-    std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoUpSocket();
+    std::shared_ptr<ServerSocket> socket = VideoStreamService::instance().getVideoUpSocket();
 
     VideoFrameProtocolData protocol_data;
     while (true) {
@@ -36,7 +36,7 @@ void VideoStreamService::videoUpService() {
 void VideoStreamService::videoDownServiceListening() {
 
     Conference &conference = Conference::instance();
-    std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoDownSocket();
+    std::shared_ptr<ServerSocket> socket = VideoStreamService::instance().getVideoDownSocket();
 
     VideoFrameProtocolData protocol_data;
     while (true) {
@@ -58,7 +58,7 @@ void VideoStreamService::videoDownServiceListening() {
 
 void VideoStreamService::videoDownServiceSending() {
     Conference &conference = Conference::instance();
-    std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoDownSocket();
+    std::shared_ptr<ServerSocket> socket = VideoStreamService::instance().getVideoDownSocket();
 
     VideoFrameProtocolData protocol_data;
     while (true) {

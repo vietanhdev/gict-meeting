@@ -1,4 +1,4 @@
-#include "receiver/receiver_socket.h"
+#include "server_socket.h"
 
 #include <arpa/inet.h>
 #include <string.h>
@@ -8,11 +8,11 @@
 #include <vector>
 #include "packet.h"
 
-ReceiverSocket::ReceiverSocket(const int port_number) : port_(port_number) {
+ServerSocket::ServerSocket(const int port_number) : port_(port_number) {
     socket_handle_ = socket(AF_INET, SOCK_DGRAM, 0);
 }
 
-const bool ReceiverSocket::bindSocketToListen() const {
+const bool ServerSocket::bindSocketToListen() const {
     if (socket_handle_ < 0) {
         std::cerr << "Binding failed. Socket was not initialized." << std::endl;
         return false;
@@ -35,11 +35,11 @@ const bool ReceiverSocket::bindSocketToListen() const {
     return true;
 }
 
-int ReceiverSocket::getSockFd() {
+int ServerSocket::getSockFd() {
     return socket_handle_;
 }
 
-const Packet ReceiverSocket::getPacket() const {
+const Packet ServerSocket::getPacket() const {
 
     Packet packet;
     
@@ -59,7 +59,7 @@ const Packet ReceiverSocket::getPacket() const {
 }
 
 
-int ReceiverSocket::sendPackage(sockaddr_in receiver_addr_, const std::vector<unsigned char> &data) {
+int ServerSocket::sendPackage(sockaddr_in receiver_addr_, const std::vector<unsigned char> &data) {
 
     return sendto(socket_handle_, data.data(), data.size(), 0,
         const_cast<sockaddr *>(

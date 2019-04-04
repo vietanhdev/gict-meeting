@@ -36,8 +36,7 @@ include_directories(
     "src/services"
     "src/services/data_types"
     "src/services/protocols"
-    "src/services/receiver"
-    "src/services/sender"
+    "src/services/server_socket"
     "src/services/stream"
     "src/services/video"
 
@@ -59,8 +58,7 @@ add_executable(${PROJECT_NAME}
     "src/services/stream/video_stream_service.cpp"
 
     "src/services/protocols/video_frame_protocol.cpp"
-    "src/services/receiver/receiver_socket.cpp"
-    "src/services/sender/sender_socket.cpp"
+    "src/services/server_socket/server_socket.cpp"
 
     "src/services/video/video_capture.cpp"
     "src/services/video/video_frame.cpp"

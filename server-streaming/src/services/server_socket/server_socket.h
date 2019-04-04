@@ -1,12 +1,12 @@
-// The ReceiverSocket class provides an abstraction for a UDP socket that
+// The ServerSocket class provides an abstraction for a UDP socket that
 // listens to incoming packets from the sender on a specified port number.
 //
 // Pass the desired port number to listen on into the constructor. Then call
 // BindSocketToListen() to bind the socket. If that method returns true, you can
 // call GetPacket() to get incoming packets from the network.
 
-#ifndef RECEIVER_SOCKET_H
-#define RECEIVER_SOCKET_H
+#ifndef SERVER_SOCKET_H
+#define SERVER_SOCKET_H
 
 #include <vector>
 #include "packet.h"
@@ -15,10 +15,10 @@
 // the max amount.
 constexpr int kMaxPacketBufferSize = 65535;
 
-class ReceiverSocket {
+class ServerSocket {
    public:
     // Creates a new socket and stores the handle.
-    explicit ReceiverSocket(const int port_number);
+    explicit ServerSocket(const int port_number);
 
     int getSockFd();
 
@@ -44,6 +44,6 @@ class ReceiverSocket {
 
     // The socket identifier (handle).
     int socket_handle_;
-};  // ReceiverSocket
+};  // ServerSocket
 
-#endif  // RECEIVER_SOCKET_H
+#endif  // server_socket_H

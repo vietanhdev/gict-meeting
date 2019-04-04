@@ -5,7 +5,7 @@
 #include <thread>
 
 #include "conference.h"
-#include "receiver_socket.h"
+#include "server_socket.h"
 #include "video_stream_service.h"
 
 int main(int argc, char** argv) {

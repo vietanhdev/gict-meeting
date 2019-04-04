@@ -25,7 +25,6 @@ void VideoStreamService::videoUpService() {
             protocol_data.unpackData(socket->getPacket().data, data);
             VideoFrame video_frame(data);
             conference.setImage(protocol_data.getClientId(), video_frame.getImage());
-
             video_frame.display();
         }
 
@@ -34,7 +33,7 @@ void VideoStreamService::videoUpService() {
 }
 
 
-void VideoStreamService::videoDownService() {
+void VideoStreamService::videoDownServiceListening() {
 
     Conference &conference = Conference::instance();
     std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoDownSocket();
@@ -48,10 +47,36 @@ void VideoStreamService::videoDownService() {
         if (protocol_data.getMessage() == Message::REQUEST_IMAGE_STREAM) {
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
-                conference.setClientAddress(protocol_data.getClientId(), socket->getPacket().client_addr);
+                conference.connectClient(protocol_data.getClientId(), socket->getPacket().client_addr);
             }
         }
 
     }
 
+}
+
+
+void VideoStreamService::videoDownServiceSending() {
+    Conference &conference = Conference::instance();
+    std::shared_ptr<ReceiverSocket> socket = VideoStreamService::instance().getVideoDownSocket();
+
+    VideoFrameProtocolData protocol_data;
+    while (true) {
+        std::vector<Participant>& participants = conference.getParticipants();
+
+        for (int i = 0; i > participants.size(); ++i) {
+
+            // Send video to client if connected
+            if (participants[i].isConnected()) {
+
+                // cvprotocol_data.packageImage()
+
+                // // Temporary: Send client video back to them
+                // socket->send
+
+            }
+
+        }
+
+    }
 }

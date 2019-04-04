@@ -24,9 +24,12 @@ int main(int argc, char** argv) {
 
     // Start threads
     std::thread video_up(VideoStreamService::videoUpService);
-    // std::thread video_down(VideoStreamService::videoDownService);
+    std::thread video_down_listen(VideoStreamService::videoDownServiceListening);
+    std::thread video_down_send(VideoStreamService::videoDownServiceSending);
 
     video_up.join();
+    video_down_listen.join();
+    video_down_send.join();
 
     return 0;
 }

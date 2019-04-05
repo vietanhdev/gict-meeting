@@ -6,9 +6,8 @@
 const int AudioStreamService::SAMPLE_RATE  = 8000;
 const int AudioStreamService::FRAMES_PER_BUFFER = 128;
 const int AudioStreamService::NUM_CHANNELS    = 1;
-const int AudioStreamService::NUM_SECONDS     = 100;
 // const int AudioStreamService::DITHER_FLAG  = paDitherOff;
-const int AudioStreamService::DITHER_FLAG     = 0; /**/
+const int AudioStreamService::DITHER_FLAG     = 1; /**/
 
 /* @todo Underflow and overflow is disabled until we fix priming of blocking write. */
 const int AudioStreamService::CHECK_OVERFLOW  = 0;
@@ -53,61 +52,6 @@ AudioStreamService::AudioStreamService() {
         Pa_onError();
     }
 
-    inputParameters.device =
-        Pa_GetDefaultInputDevice(); /* default input device */
-    printf("Input device # %d.\n", inputParameters.device);
-    printf("Input LL: %g s\n",
-           Pa_GetDeviceInfo(inputParameters.device)->defaultLowInputLatency);
-    printf("Input HL: %g s\n",
-           Pa_GetDeviceInfo(inputParameters.device)->defaultHighInputLatency);
-    inputParameters.channelCount = NUM_CHANNELS;
-    inputParameters.sampleFormat = PA_SAMPLE_TYPE;
-    inputParameters.suggestedLatency =
-        Pa_GetDeviceInfo(inputParameters.device)->defaultHighInputLatency;
-    inputParameters.hostApiSpecificStreamInfo = NULL;
-
-    outputParameters.device =
-        Pa_GetDefaultOutputDevice(); /* default output device */
-    printf("Output device # %d.\n", outputParameters.device);
-    printf("Output LL: %g s\n",
-           Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency);
-    printf("Output HL: %g s\n",
-           Pa_GetDeviceInfo(outputParameters.device)->defaultHighOutputLatency);
-    outputParameters.channelCount = NUM_CHANNELS;
-    outputParameters.sampleFormat = PA_SAMPLE_TYPE;
-    outputParameters.suggestedLatency =
-        Pa_GetDeviceInfo(outputParameters.device)->defaultHighOutputLatency;
-    outputParameters.hostApiSpecificStreamInfo = NULL;
-
-    err = Pa_OpenStream(&in_stream, &inputParameters, NULL, SAMPLE_RATE,
-                        FRAMES_PER_BUFFER,
-                        paClipOff, /* we won't output out of range samples so
-                                      don't bother clipping them */
-                        NULL,      /* no callback, use blocking API */
-                        NULL);     /* no callback, so no callback userData */
-    if (err != paNoError) {
-        Pa_onError();
-    }
-
-    err = Pa_OpenStream(&out_stream, NULL, &outputParameters, SAMPLE_RATE,
-                        FRAMES_PER_BUFFER,
-                        paClipOff, /* we won't output out of range samples so
-                                      don't bother clipping them */
-                        NULL,      /* no callback, use blocking API */
-                        NULL);     /* no callback, so no callback userData */
-    if (err != paNoError) {
-        Pa_onError();
-    }
-
-    err = Pa_StartStream(in_stream);
-    if (err != paNoError) {
-        Pa_onError();
-    }
-
-    err = Pa_StartStream(out_stream);
-    if (err != paNoError) {
-        Pa_onError();
-    }
 }
 
 AudioStreamService::~AudioStreamService() {
@@ -188,10 +132,47 @@ void AudioStreamService::upStreamingThread() {
                 // Init a socket to the server
                 socket.init(ip_address, port);
 
+
+                audio_service.inputParameters.device =
+                    Pa_GetDefaultInputDevice(); /* default input device */
+                printf("Input device # %d.\n", audio_service.inputParameters.device);
+                printf("Input LL: %g s\n",
+                    Pa_GetDeviceInfo(audio_service.inputParameters.device)->defaultLowInputLatency);
+                printf("Input HL: %g s\n",
+                    Pa_GetDeviceInfo(audio_service.inputParameters.device)->defaultHighInputLatency);
+                audio_service.inputParameters.channelCount = audio_service.NUM_CHANNELS;
+                audio_service.inputParameters.sampleFormat = PA_SAMPLE_TYPE;
+                audio_service.inputParameters.suggestedLatency =
+                    Pa_GetDeviceInfo(audio_service.inputParameters.device)->defaultHighInputLatency;
+                audio_service.inputParameters.hostApiSpecificStreamInfo = NULL;
+
+
+                audio_service.err = Pa_OpenStream(&audio_service.in_stream, &audio_service.inputParameters, NULL, audio_service.SAMPLE_RATE,
+                    audio_service.FRAMES_PER_BUFFER,
+                    paClipOff, /* we won't output out of range samples so
+                                don't bother clipping them */
+                    NULL,      /* no callback, use blocking API */
+                    NULL);     /* no callback, so no callback userData */
+                if (audio_service.err != paNoError) {
+                    audio_service.Pa_onError();
+                }
+                
+
+                audio_service.err = Pa_StartStream(audio_service.in_stream);
+                if (audio_service.err != paNoError) {
+                    audio_service.Pa_onError();
+                }
+
+
             } else {  // Stop streaming
 
                 // Destroy socket connection to the server
                 socket.destroy();
+
+                audio_service.err = Pa_StopStream(audio_service.in_stream);
+                if (audio_service.err != paNoError) {
+                    audio_service.Pa_onError();
+                }
             }
 
             audio_service.streaming = new_streaming_status;
@@ -241,6 +222,37 @@ void AudioStreamService::downStreamingThread() {
         if (new_streaming_status != streaming) {
             if (new_streaming_status == true) {  // Start streaming
 
+
+                // Init audio stream
+                streaming_service.outputParameters.device =
+                    Pa_GetDefaultOutputDevice(); /* default output device */
+                printf("Output device # %d.\n", streaming_service.outputParameters.device);
+                printf("Output LL: %g s\n",
+                    Pa_GetDeviceInfo(streaming_service.outputParameters.device)->defaultLowOutputLatency);
+                printf("Output HL: %g s\n",
+                    Pa_GetDeviceInfo(streaming_service.outputParameters.device)->defaultHighOutputLatency);
+                streaming_service.outputParameters.channelCount = streaming_service.NUM_CHANNELS;
+                streaming_service.outputParameters.sampleFormat = PA_SAMPLE_TYPE;
+                streaming_service.outputParameters.suggestedLatency =
+                    Pa_GetDeviceInfo(streaming_service.outputParameters.device)->defaultHighOutputLatency;
+                streaming_service.outputParameters.hostApiSpecificStreamInfo = NULL;
+
+
+                streaming_service.err = Pa_OpenStream(&streaming_service.out_stream, NULL, &streaming_service.outputParameters, streaming_service.SAMPLE_RATE,
+                                    streaming_service.FRAMES_PER_BUFFER,
+                                    paClipOff, /* we won't output out of range samples so
+                                                don't bother clipping them */
+                                    NULL,      /* no callback, use blocking API */
+                                    NULL);     /* no callback, so no callback userData */
+                if (streaming_service.err != paNoError) {
+                    streaming_service.Pa_onError();
+                }
+
+                streaming_service.err = Pa_StartStream(streaming_service.out_stream);
+                if (streaming_service.err != paNoError) {
+                    streaming_service.Pa_onError();
+                }
+
                 // Get up port
                 int port = Conference::instance().getAudioDownPort();
 
@@ -255,11 +267,17 @@ void AudioStreamService::downStreamingThread() {
 
                 std::cout << "Requesting audio streaming from server"
                           << std::endl;
+                          
 
             } else {  // Stop streaming
 
                 // Destroy socket connection to the server
                 socket.destroy();
+
+                audio_service.err = Pa_StopStream(audio_service.out_stream);
+                if (audio_service.err != paNoError) {
+                    audio_service.Pa_onError();
+                }
             }
 
             streaming_service.streaming = new_streaming_status;

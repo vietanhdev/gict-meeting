@@ -1,4 +1,4 @@
-
+            
 #include "audio_stream_service.h"
 AudioStreamService::AudioStreamService() {}
 
@@ -31,7 +31,6 @@ void AudioStreamService::audioUpService() {
             protocol_data.unpackData(data, payload_data);
             
             AudioStreamService::instance().sendAudio(protocol_data.getClientId(), protocol_data.unpackPayload(data));
-
             // std::cout << "Receive:" << payload_data.size() << std::endl;
             // std::cout << "Receive content:" << static_cast<int>(payload_data[30]) << std::endl;
 

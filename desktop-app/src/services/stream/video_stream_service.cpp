@@ -49,6 +49,11 @@ void VideoStreamService::upStreamingThread() {
                 continue;
             }
 
+            // Flip frame if needed
+            if (stream_service.shouldFlipCamFrame()) {
+                cv::flip(image, image, 1);
+            }
+
             // Check time to ensure keep sending in prefered fps
             if (Timer::calcTimePassed(stream_service.last_image_up_time) > 1000 / stream_service.frame_up_fps ) {
                 socket.sendPacket(protocol_data.packageClientFrame(image));
@@ -153,4 +158,13 @@ bool VideoStreamService::stopStreaming() {
 
     VideoStreamService::instance().setStreaming(false);
     return true;
+}
+
+
+// Set to flip camera frame or not
+void VideoStreamService::setFlipCamFrame(bool flip) {
+    flip_cam = flip;
+}
+bool VideoStreamService::shouldFlipCamFrame() {
+    return flip_cam;
 }

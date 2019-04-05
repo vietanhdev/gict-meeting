@@ -52,6 +52,7 @@ private slots:
     void startConference();
     void updateConferenceFrame();
     void updateClientCamFrame();
+    void flipCamCheckboxChanged(int status);
 
 private:
     Ui::MainWindow *ui;

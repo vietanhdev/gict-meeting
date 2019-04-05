@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->cameraSelector, SIGNAL(activated(int)), this,
             SLOT(cameraSelector_activated()));
 
+    // Flip cam checkbox
+    connect(ui->flipCameraCheckBox, SIGNAL(stateChanged(int)), this, SLOT(flipCamCheckboxChanged(int)));
+
     // Update frames signal
     connect(&VideoStreamService::instance(), SIGNAL(newConferenceFrame()), this,
             SLOT(updateConferenceFrame()));
@@ -176,4 +179,9 @@ void MainWindow::setCurrentImage(const cv::Mat &img) {
 cv::Mat MainWindow::getCurrentImage() {
     std::lock_guard<std::mutex> guard(current_img_mutex);
     return current_img.clone();
+}
+
+
+void MainWindow::flipCamCheckboxChanged(int status) {
+    VideoStreamService::instance().setFlipCamFrame(status);
 }

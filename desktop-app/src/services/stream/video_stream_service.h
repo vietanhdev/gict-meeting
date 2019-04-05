@@ -46,6 +46,9 @@ class VideoStreamService: public QObject {
         float frame_up_fps = 15; // Frame rate of image streaming to the server
         
 
+        // Flip image or not. It is applied globally
+        std::atomic<bool> flip_cam = true;
+
     public:
         bool isStreaming();
         void setStreaming(bool streaming);
@@ -65,6 +68,10 @@ class VideoStreamService: public QObject {
 
         bool startStreaming();
         bool stopStreaming();
+
+        // Set to flip camera frame or not. It is applied globally
+        void setFlipCamFrame(bool flip);
+        bool shouldFlipCamFrame();
 
     signals:
         void newConferenceFrame();

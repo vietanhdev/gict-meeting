@@ -19,7 +19,7 @@ constexpr int kDisplayDelayTimeMS = 15;
 
 // JPEG compression values.
 static const std::string kJPEGExtension = ".jpg";
-constexpr int kJPEGQuality = 25;
+constexpr int kJPEGQuality = 20;
 
 }  // namespace
 

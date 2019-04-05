@@ -77,9 +77,15 @@ void VideoStreamService::videoDownServiceListening() {
 void VideoStreamService::videoDownServiceSending() {
     Conference &conference = Conference::instance();
     std::shared_ptr<ServerSocket> socket = VideoStreamService::instance().getVideoDownSocket();
-
+    VideoStreamService &stream_service = VideoStreamService::instance();
     VideoFrameProtocolData protocol_data;
     while (true) {
+
+        // Check time to ensure keep sending in prefered fps
+        if (Timer::calcTimePassed(stream_service.last_image_up_time) < 1000 / stream_service.frame_up_fps ) {
+            stream_service.last_image_up_time = Timer::getCurrentTime();
+            continue;
+        }
       
         for (int i = 0; i < conference.participants.size(); ++i) {
 

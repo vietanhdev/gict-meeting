@@ -12,11 +12,18 @@
 #include "server_socket.h"
 
 
+#include "timer.h"
+
 class VideoStreamService {
 
     private:
         std::shared_ptr<ServerSocket> video_up_socket;
         std::shared_ptr<ServerSocket> video_down_socket;
+
+        // Timer
+        // Used to control the down streaming framerate
+        Timer::time_point_t last_image_up_time; // Last time we sent image to all client
+        float frame_up_fps = 15; // Frame rate of image streaming to clients
 
     public:
         static VideoStreamService& instance(){

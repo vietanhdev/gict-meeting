@@ -43,7 +43,7 @@ class VideoStreamService: public QObject {
         // Timer
         // Used to control the up streaming framerate
         Timer::time_point_t last_image_up_time; // Last time we sent image to the server
-        float frame_up_fps = 10; // Frame rate of image streaming to the server
+        float frame_up_fps = 15; // Frame rate of image streaming to the server
         
 
     public:

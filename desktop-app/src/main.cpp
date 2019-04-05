@@ -12,10 +12,6 @@
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
 
-    // Init file storage
-    gict_video_conf::FileStorage fs;
-    fs.initStorage();
-
     // Style our application with custom dark style
     a.setStyle(new DarkStyle);
 

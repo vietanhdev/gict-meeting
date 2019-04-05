@@ -49,7 +49,6 @@ add_executable(${PROJECT_NAME}
     "src/main.cpp"
 
     "src/utilities/utility.cpp"
-    "src/utilities/file_storage.cpp"
     "src/utilities/timer.cpp"
 
     "src/services/data_types/conference.cpp"

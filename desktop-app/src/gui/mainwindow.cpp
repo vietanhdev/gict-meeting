@@ -68,9 +68,11 @@ void MainWindow::playShutter() {
 void MainWindow::newConference() {
 
     VideoStreamService &ss = VideoStreamService::instance();
+    AudioStreamService &as = AudioStreamService::instance();
 
-    if (ss.isStreaming()) {
+    if (ss.isStreaming() || as.isStreaming()) {
         ss.stopStreaming();
+        as.stopStreaming();
         ui->startStopBtn->setText("Join a Conference");
     } else {
         new_conf_wizard->restart();

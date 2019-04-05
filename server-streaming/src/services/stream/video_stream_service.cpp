@@ -88,10 +88,10 @@ void VideoStreamService::videoDownServiceSending() {
 
                 for (int j = 0; j < conference.participants.size(); ++j) {
 
-                    if (j != i) {
+                    // if (j != i) {
                         std::vector<unsigned char> message = protocol_data.packageData(conference.participants[j].getClientId(), conference.participants[j].getImage());
                         socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
-                    }
+                    // }
                     
                 }
 

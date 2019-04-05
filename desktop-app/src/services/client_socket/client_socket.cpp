@@ -38,8 +38,6 @@ void ClientSocket::sendPacket(const std::vector<unsigned char> &data) const {
                reinterpret_cast<const sockaddr *>(&server_addr_)),
            sizeof(server_addr_));
 
-    std::cout << "Sending size: " << data.size() << std::endl;
-
     if (result == -1) {
         switch(errno){
             case EFAULT:

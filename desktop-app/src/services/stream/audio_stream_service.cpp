@@ -280,6 +280,9 @@ void AudioStreamService::downStreamingThread() {
 
 			if (payload.empty()) continue;
 
+			// std::cout << "Received size = " << payload.size() << std::endl;
+			// std::cout << "Receive content:" << static_cast<int>(payload[30]) << std::endl;
+
 			audio_service.err =
 			Pa_WriteStream(audio_service.out_stream,
 							payload.data(), AudioStreamService::FRAMES_PER_BUFFER);

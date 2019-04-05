@@ -56,8 +56,11 @@ add_executable(${PROJECT_NAME}
     "src/services/data_types/participant.cpp"
 
     "src/services/stream/video_stream_service.cpp"
-
     "src/services/protocols/video_frame_protocol.cpp"
+
+    "src/services/stream/audio_stream_service.cpp"
+    "src/services/protocols/audio_frame_protocol.cpp"
+
     "src/services/server_socket/server_socket.cpp"
 
     "src/services/video/video_capture.cpp"

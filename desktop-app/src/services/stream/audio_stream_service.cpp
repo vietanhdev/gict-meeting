@@ -1,6 +1,22 @@
 
 #include "audio_stream_service.h"
 
+
+/* const int AudioStreamService::SAMPLE_RATE  = 17932; // Test failure to open with this value. */
+const int AudioStreamService::SAMPLE_RATE  = 8000;
+const int AudioStreamService::FRAMES_PER_BUFFER = 128;
+const int AudioStreamService::NUM_CHANNELS    = 1;
+const int AudioStreamService::NUM_SECONDS     = 100;
+// const int AudioStreamService::DITHER_FLAG  = paDitherOff;
+const int AudioStreamService::DITHER_FLAG     = 0; /**/
+
+/* @todo Underflow and overflow is disabled until we fix priming of blocking write. */
+const int AudioStreamService::CHECK_OVERFLOW  = 0;
+const int AudioStreamService::CHECK_UNDERFLOW  = 0;
+
+const int AudioStreamService::SAMPLE_SIZE = 1;
+const int AudioStreamService::SAMPLE_SILENCE  = 128;
+
 AudioStreamService::AudioStreamService() {
     std::cout << "Initializing Audio Service" << std::endl;
 
@@ -183,16 +199,24 @@ void AudioStreamService::upStreamingThread() {
 
         if (new_streaming_status) {
             audio_service.err =
-                Pa_WriteStream(audio_service.in_stream,
+                Pa_ReadStream(audio_service.in_stream,
                                audio_service.in_sampleBlock, FRAMES_PER_BUFFER);
             if (audio_service.err && CHECK_UNDERFLOW) {
                 audio_service.Pa_onxRun();
             }
 
+			// Pa_WriteStream(audio_service.out_stream,
+			// 				audio_service.in_sampleBlock, AudioStreamService::FRAMES_PER_BUFFER);
+            // if (audio_service.err && CHECK_UNDERFLOW) {
+            //     audio_service.Pa_onxRun();
+            // }
+
             std::vector<unsigned char> data(
-                audio_service.out_sampleBlock,
-                audio_service.out_sampleBlock + FRAMES_PER_BUFFER);
+                audio_service.in_sampleBlock,
+                audio_service.in_sampleBlock + FRAMES_PER_BUFFER);
             socket.sendPacket(protocol_data.packageClientFrame(data));
+
+			// std::cout << "Sent size = " << data.size() << std::endl;
         }
     }
 
@@ -202,7 +226,7 @@ void AudioStreamService::downStreamingThread() {
 
     ClientSocket socket;
     // Get up port
-    int port = Conference::instance().getAudioUpPort();
+    int port = Conference::instance().getAudioDownPort();
     // Server ip addresss
     std::string ip_address = Conference::instance().getServerIp();
     // Init a socket to the server
@@ -257,8 +281,8 @@ void AudioStreamService::downStreamingThread() {
 			if (payload.empty()) continue;
 
 			audio_service.err =
-			Pa_ReadStream(audio_service.out_stream,
-							payload.data(), FRAMES_PER_BUFFER);
+			Pa_WriteStream(audio_service.out_stream,
+							payload.data(), AudioStreamService::FRAMES_PER_BUFFER);
             if (audio_service.err && CHECK_UNDERFLOW) {
                 audio_service.Pa_onxRun();
             }

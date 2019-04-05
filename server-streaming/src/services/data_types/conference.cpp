@@ -57,10 +57,19 @@ bool Conference::checkAuth(unsigned char client_id, int auth_key) {
     return false;
 }
 
-void Conference::connectClient(unsigned char client_id, struct sockaddr_in client_addr) {
+void Conference::connectClientImage(unsigned char client_id, struct sockaddr_in client_addr) {
     for (int i = 0; i < participants.size(); ++i) {
         if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
-            participants[i].setClientAddress(client_addr);
+            participants[i].setClientImageAddress(client_addr);
+            return;
+        }
+    }
+}
+
+void Conference::connectClientAudio(unsigned char client_id, struct sockaddr_in client_addr) {
+    for (int i = 0; i < participants.size(); ++i) {
+        if (static_cast<int>(client_id) == static_cast<int>(participants[i].getClientId())) {
+            participants[i].setClientAudioAddress(client_addr);
             return;
         }
     }

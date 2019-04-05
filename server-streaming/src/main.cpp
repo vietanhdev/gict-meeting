@@ -7,6 +7,7 @@
 #include "conference.h"
 #include "server_socket.h"
 #include "video_stream_service.h"
+#include "audio_stream_service.h"
 
 int main(int argc, char** argv) {
     // Welcome message
@@ -27,9 +28,17 @@ int main(int argc, char** argv) {
     std::thread video_down_listen(VideoStreamService::videoDownServiceListening);
     std::thread video_down_send(VideoStreamService::videoDownServiceSending);
 
+    std::thread audio_up(AudioStreamService::audioUpService);
+    std::thread audio_down_listen(AudioStreamService::audioDownServiceListening);
+    std::thread audio_down_send(AudioStreamService::audioDownServiceSending);
+
     video_up.join();
     video_down_listen.join();
     video_down_send.join();
+
+    audio_up.join();
+    audio_down_listen.join();
+    audio_down_send.join();
 
     return 0;
 }

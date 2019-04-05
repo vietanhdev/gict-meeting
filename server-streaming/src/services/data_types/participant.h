@@ -23,10 +23,13 @@ class Participant {
         std::string name;
         unsigned char client_id;
         int auth_key;
-        struct sockaddr_in client_addr;
+        struct sockaddr_in client_image_addr;
+        struct sockaddr_in client_audio_addr;
         cv::Mat image;
 
-        bool connected = false; // Connected = true means client have connected to the system => client_addr has been set.
+        bool image_connected = false; // image_connected = true means client have connected to the system and requested image stream  => client_addr has been set.
+
+        bool audio_connected = false; // image_connected = true means client have connected to the system and requested audio stream  => client_addr has been set.
 
     public:
         Participant(const Participant& p) {
@@ -34,8 +37,10 @@ class Participant {
             this->name = p.name;
             this->client_id = p.client_id;
             this->auth_key = p.auth_key;
-            this->client_addr = p.client_addr;
-            this->connected = p.connected;
+            this->client_audio_addr = p.client_audio_addr;
+            this->client_image_addr = p.client_image_addr;
+            this->image_connected = p.image_connected;
+            this->audio_connected = p.audio_connected;
         }
 
         std::string getName() {
@@ -47,15 +52,28 @@ class Participant {
         int getAuthKey() const {
             return auth_key;
         }
-        void setClientAddress(struct sockaddr_in client_addr) {
+
+        void setClientImageAddress(struct sockaddr_in client_addr) {
             std::lock_guard<std::mutex> lock(g_mutex);
-            this->client_addr = client_addr;
-            this->connected = true;
+            this->client_image_addr = client_addr;
+            this->image_connected = true;
         }
 
-        struct sockaddr_in getClientAddress() {
+
+        void setClientAudioAddress(struct sockaddr_in client_addr) {
             std::lock_guard<std::mutex> lock(g_mutex);
-            return client_addr;
+            this->client_audio_addr = client_addr;
+            this->audio_connected = true;
+        }
+
+        struct sockaddr_in getClientImageAddress() {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            return client_image_addr;
+        }
+
+        struct sockaddr_in getClientAudioAddress() {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            return client_audio_addr;
         }
 
         cv::Mat getImage() {
@@ -69,9 +87,14 @@ class Participant {
         }
 
 
-        bool isConnected() {
+        bool isConnectedImage() {
             std::lock_guard<std::mutex> lock(g_mutex);
-            return connected;
+            return image_connected;
+        }
+
+        bool isConnectedAudio() {
+            std::lock_guard<std::mutex> lock(g_mutex);
+            return audio_connected;
         }
 
         Participant(unsigned char client_id, std::string name, int auth_key);

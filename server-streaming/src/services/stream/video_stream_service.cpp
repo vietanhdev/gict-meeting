@@ -21,7 +21,7 @@ void VideoStreamService::videoUpService() {
         protocol_data.unpackHeader(data);
 
         // Wrong format
-        if (protocol_data.getMessage() != Message::CLIENT_FRAME) {
+        if (protocol_data.getMessage() != Message::CLIENT_IMAGE_FRAME) {
             std::cerr << "Incoming packet in wrong format." << std::endl;
             continue;
         }
@@ -63,7 +63,7 @@ void VideoStreamService::videoDownServiceListening() {
 
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
-                conference.connectClient(protocol_data.getClientId(), socket->getPacket().client_addr);
+                conference.connectClientImage(protocol_data.getClientId(), socket->getPacket().client_addr);
             }
         }
 
@@ -84,10 +84,10 @@ void VideoStreamService::videoDownServiceSending() {
         for (int i = 0; i < conference.participants.size(); ++i) {
 
             // Send video to client if connected
-            if (conference.participants[i].isConnected()) {
+            if (conference.participants[i].isConnectedImage()) {
 
                 std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), conference.participants[i].getImage());
-                socket->sendPackage(conference.participants[i].getClientAddress(), message);
+                socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
 
             }
 

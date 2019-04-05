@@ -34,7 +34,7 @@ void ClientSocket::destroy() {
     close(socket_handle_);
 }
 
-void ClientSocket::sendPacket(std::vector<unsigned char> data) const {
+void ClientSocket::sendPacket(std::vector<unsigned char> data) {
 
     // Ecrypt the packet
     Cipher::xor_crypt(secret_key, data);
@@ -44,36 +44,52 @@ void ClientSocket::sendPacket(std::vector<unsigned char> data) const {
                reinterpret_cast<const sockaddr *>(&server_addr_)),
            sizeof(server_addr_));
 
+
     if (result == -1) {
         switch(errno){
             case EFAULT:
-                printf("Invalid user space address.\n");
+                std::cout << "Invalid user space address.\n" << std::endl;
                 break;
             case EBADF:
-                printf("Invalid descriptor.\n");
+                std::cout << "Invalid descriptor.\n" << std::endl;
                 break;
             case EINVAL:
-                printf("Invalid argument.\n");
+                std::cout << "Invalid argument.\n" << std::endl;
                 break;
             case EDESTADDRREQ:
-                printf("No Peer address.\n");
+                std::cout << "No Peer address.\n" << std::endl;
                 break;
             case EISCONN:
-                printf("Connection mode socket.\n");
+                std::cout << "Connection mode socket.\n" << std::endl;
                 break;
             case ENOTSOCK:
-                printf("The given socket is not a socket.\n");
+                std::cout << "The given socket is not a socket.\n" << std::endl;
                 break;
             case ENOTCONN:
-                printf("No Target.\n");
+                std::cout << "No Target.\n" << std::endl;
                 break;
             case ENOBUFS:
-                printf("Network output is full.\n");
+                std::cout << "Network output is full.\n" << std::endl;
                 break;
             default:
-                printf("No spezific error.\n");
+                std::cout << "No spezific error.\n" << std::endl;
+        }
+
+
+
+        // Try to re-init the socket and send again
+        init(receiver_ip, receiver_port);
+        int result = sendto(socket_handle_, data.data(), data.size(), 0,
+           const_cast<sockaddr *>(
+               reinterpret_cast<const sockaddr *>(&server_addr_)),
+           sizeof(server_addr_));
+
+        if (result == -1) {
+            std::cout << "Error on sending packet" << std::endl;
         }
     }
+    
+    
     
 }
 

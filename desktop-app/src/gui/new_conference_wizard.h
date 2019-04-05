@@ -13,6 +13,7 @@
 
 #include "conference.h"
 #include "video_stream_service.h"
+#include "audio_stream_service.h"
  
 namespace Ui {
 class NewConferenceWizard;

@@ -6,7 +6,7 @@ VideoStreamService::VideoStreamService() {}
 void VideoStreamService::upStreamingThread() {
 
     ClientSocket socket;
-    VideoCapture video_capture(false, 1);
+    VideoCapture video_capture(false, 0.5);
     VideoFrameProtocolData protocol_data;
 
     // Get up port

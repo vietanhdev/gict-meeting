@@ -95,7 +95,13 @@ void NewConferenceWizard::done(int result) {
             if (!VideoStreamService::instance().startStreaming()) {
                 QMessageBox::critical(
                     this, "Error",
-                    "Could not join the conference."
+                    "Could not join the conference - Image streaming error."
+                );
+            }
+            if (!AudioStreamService::instance().startStreaming()) {
+                QMessageBox::critical(
+                    this, "Error",
+                    "Could not join the conference - Audio streaming error."
                 );
             }
             emit newConferenceJoined();

@@ -86,8 +86,11 @@ add_executable(${PROJECT_NAME}
     "src/services/data_types/participant.cpp"
 
     "src/services/stream/video_stream_service.cpp"
-
     "src/services/protocols/video_frame_protocol.cpp"
+
+    "src/services/stream/audio_stream_service.cpp"
+    "src/services/protocols/audio_frame_protocol.cpp"
+
     "src/services/client_socket/client_socket.cpp"
 
     "src/services/video/video_capture.cpp"
@@ -113,7 +116,7 @@ set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "disable yaml contrib")
 add_subdirectory(src/yaml_cpp)
 
 # link required libs
-target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(${PROJECT_NAME} ${Qt5Widgets_LIBRARIES} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp ${CMAKE_THREAD_LIBS_INIT} portaudio)
 
 # Copy files
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

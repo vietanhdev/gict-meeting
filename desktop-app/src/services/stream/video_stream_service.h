@@ -11,17 +11,13 @@
 #include <memory>
 #include <iostream>
 
-#include "conference.h"
-
-
-#include <iostream>
-#include <string>
-#include <vector>
-
 #include "video_frame_protocol.h"
 #include "client_socket.h"
 #include "video_capture.h"
 
+#include "conference.h"
+
+#include "timer.h"
 
 class VideoStreamService: public QObject {
 
@@ -43,6 +39,12 @@ class VideoStreamService: public QObject {
 
         std::shared_ptr<std::thread> up_streaming_thread;
         std::shared_ptr<std::thread> down_streaming_thread;
+
+        // Timer
+        // Used to control the up streaming framerate
+        Timer::time_point_t last_image_up_time; // Last time we sent image to the server
+        float frame_up_fps = 10; // Frame rate of image streaming to the server
+        
 
     public:
         bool isStreaming();

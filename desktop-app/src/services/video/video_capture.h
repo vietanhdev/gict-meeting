@@ -20,7 +20,9 @@ class VideoCapture {
     //
     // Specify whether or not the video being sent is displayed in a window, and
     // the scale = (0, 1] which will affect the size of the data.
-    VideoCapture(const bool show_video, const float scale);
+    VideoCapture(const bool show_video, cv::Size image_size);
+
+    cv::Mat resizeKeepAspectRatio(const cv::Mat &input, const cv::Size &dstSize, const cv::Scalar &bgcolor);
 
     // Captures and returns a frame from the available video camera.
     //
@@ -36,12 +38,10 @@ class VideoCapture {
     // connected camera and extract frames from it.
     cv::VideoCapture capture_;
 
-    // The image scale should be between (0 and 1]. The image will be
-    // downsampled by the given amount to reduce cost of sending the data.
-    const float scale_;
-
     // Set to true to show the video.
     const bool show_video_;
+
+    cv::Size image_size;
 };
 
 #endif  // VIDEO_VIDEO_CAPTURE_H

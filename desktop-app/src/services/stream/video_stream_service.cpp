@@ -6,7 +6,7 @@ VideoStreamService::VideoStreamService() {}
 void VideoStreamService::upStreamingThread() {
 
     ClientSocket socket;
-    VideoCapture video_capture(false, 0.5);
+    VideoCapture video_capture(false, cv::Size(320, 240));
     VideoFrameProtocolData protocol_data;
 
     // Get up port
@@ -17,9 +17,9 @@ void VideoStreamService::upStreamingThread() {
     socket.init(ip_address, port);
 
     for (;;) {
-        VideoStreamService &streaming_service = VideoStreamService::instance();
-        bool streaming = streaming_service.isStreaming();
-        bool new_streaming_status = streaming_service.streaming_signal_flag;
+        VideoStreamService &stream_service = VideoStreamService::instance();
+        bool streaming = stream_service.isStreaming();
+        bool new_streaming_status = stream_service.streaming_signal_flag;
         if (new_streaming_status != streaming) {
             if (new_streaming_status == true) { // Start streaming
 
@@ -39,7 +39,7 @@ void VideoStreamService::upStreamingThread() {
 
             }
 
-            streaming_service.streaming = new_streaming_status;
+            stream_service.streaming = new_streaming_status;
         }
 
         if (new_streaming_status) {
@@ -48,10 +48,15 @@ void VideoStreamService::upStreamingThread() {
                 std::cerr << "Could not get image from camera" << std::endl;
                 continue;
             }
-            socket.sendPacket(protocol_data.packageClientFrame(image));
+
+            // Check time to ensure keep sending in prefered fps
+            if (Timer::calcTimePassed(stream_service.last_image_up_time) > 1000 / stream_service.frame_up_fps ) {
+                socket.sendPacket(protocol_data.packageClientFrame(image));
+                stream_service.last_image_up_time = Timer::getCurrentTime();
+            }
+
             Conference::instance().setClientCamFrame(image);
             emit VideoStreamService::instance().newClientCamFrame();
-
         }
 
     }
@@ -63,9 +68,9 @@ void VideoStreamService::downStreamingThread() {
     ClientSocket socket;
     VideoFrameProtocolData protocol_data;
     for (;;) {
-        VideoStreamService &streaming_service = VideoStreamService::instance();
-        bool streaming = streaming_service.isStreaming();
-        bool new_streaming_status = streaming_service.streaming_signal_flag;
+        VideoStreamService &stream_service = VideoStreamService::instance();
+        bool streaming = stream_service.isStreaming();
+        bool new_streaming_status = stream_service.streaming_signal_flag;
         if (new_streaming_status != streaming) {
             if (new_streaming_status == true) { // Start streaming
 
@@ -91,7 +96,7 @@ void VideoStreamService::downStreamingThread() {
 
             }
 
-            streaming_service.streaming = new_streaming_status;
+            stream_service.streaming = new_streaming_status;
         }
 
         //Streaming

@@ -1,6 +1,5 @@
 
 #include "audio_stream_service.h"
-
 AudioStreamService::AudioStreamService() {}
 
 void AudioStreamService::audioUpService() {
@@ -100,20 +99,5 @@ void AudioStreamService::audioDownServiceSending() {
     std::shared_ptr<ServerSocket> socket = AudioStreamService::instance().getAudioDownSocket();
 
     AudioFrameProtocolData protocol_data;
-    while (true) {
-      
-        // for (int i = 0; i < conference.participants.size(); ++i) {
-
-        //     // Send audio to client if connected
-        //     if (conference.participants[i].isConnected()) {
-
-        //         std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), conference.participants[i].getImage());
-        //         socket->sendPackage(conference.participants[i].getClientAddress(), message);
-
-        //     }
-
-        // }
-
-
-    }
+    while (true) {}
 }

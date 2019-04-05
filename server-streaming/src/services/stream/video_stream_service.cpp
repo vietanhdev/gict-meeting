@@ -86,8 +86,14 @@ void VideoStreamService::videoDownServiceSending() {
             // Send video to client if connected
             if (conference.participants[i].isConnectedImage()) {
 
-                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), conference.participants[i].getImage());
-                socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                for (int j = 0; j < conference.participants.size(); ++j) {
+
+                    if (j != i) {
+                        std::vector<unsigned char> message = protocol_data.packageData(conference.participants[j].getClientId(), conference.participants[j].getImage());
+                        socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                    }
+                    
+                }
 
             }
 

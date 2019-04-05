@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+#include "cipher.h"
+
+#include "conference.h"
 
 // This is the maximum UDP packet size, and the buffer will be allocated for
 // the max amount.
@@ -17,7 +20,7 @@ class ClientSocket {
     ClientSocket();
     void init(const std::string &receiver_ip, const int receiver_port);
     void destroy();
-    void sendPacket(const std::vector<unsigned char> &data) const;
+    void sendPacket(std::vector<unsigned char> data) const;
     std::vector<unsigned char> getPacket() const;
 
    private:
@@ -34,6 +37,9 @@ class ClientSocket {
 
     std::string receiver_ip;
     int receiver_port;
+
+    // Key for connection encryption
+    std::string secret_key;
 
 };  // ClientSocket
 

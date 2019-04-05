@@ -11,6 +11,19 @@
 #include <vector>
 #include "packet.h"
 
+#include <arpa/inet.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/types.h> 
+
+#include <iostream>
+#include <vector>
+#include "packet.h"
+
+#include "cipher.h"
+
+#include "conference.h"
+
 // This is the maximum UDP packet size, and the buffer will be allocated for
 // the max amount.
 constexpr int kMaxPacketBufferSize = 65535;
@@ -32,7 +45,7 @@ class ServerSocket {
     const Packet getPacket() const;
 
     // Send package to client
-    int sendPackage(sockaddr_in receiver_addr_, const std::vector<unsigned char> &data);
+    int sendPackage(sockaddr_in receiver_addr_, std::vector<unsigned char> data);
 
    private:
     // This buffer will be used to collect incoming packet data. It is only used
@@ -44,6 +57,10 @@ class ServerSocket {
 
     // The socket identifier (handle).
     int socket_handle_;
+
+    // Key for connection encryption
+    std::string secret_key;
+
 };  // ServerSocket
 
 #endif  // server_socket_H

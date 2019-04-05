@@ -1,13 +1,5 @@
 #include "server_socket.h"
 
-#include <arpa/inet.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h> 
-
-#include <iostream>
-#include <vector>
-#include "packet.h"
 
 ServerSocket::ServerSocket(const int port_number) : port_(port_number) {
     socket_handle_ = socket(AF_INET, SOCK_DGRAM, 0);
@@ -15,6 +7,8 @@ ServerSocket::ServerSocket(const int port_number) : port_(port_number) {
     read_timeout.tv_sec = 0;
     read_timeout.tv_usec = 10;
     setsockopt(socket_handle_, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof read_timeout);
+
+    secret_key = Conference::instance().getSecretKey();
 }
 
 const bool ServerSocket::bindSocketToListen() const {
@@ -60,11 +54,17 @@ const Packet ServerSocket::getPacket() const {
         packet.data.insert(packet.data.end(), &buffer_[0], &buffer_[num_bytes]);
     }
 
+    // Decrypt the packet
+    Cipher::xor_crypt(secret_key, packet.data);
+
     return packet;
 }
 
 
-int ServerSocket::sendPackage(sockaddr_in receiver_addr_, const std::vector<unsigned char> &data) {
+int ServerSocket::sendPackage(sockaddr_in receiver_addr_, std::vector<unsigned char> data) {
+
+    // Ecrypt the packet
+    Cipher::xor_crypt(secret_key, data);
 
     return sendto(socket_handle_, data.data(), data.size(), 0,
         const_cast<sockaddr *>(

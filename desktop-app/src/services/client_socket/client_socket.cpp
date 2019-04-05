@@ -11,7 +11,9 @@
 
 #include "errno.h"
 
-ClientSocket::ClientSocket() {}
+ClientSocket::ClientSocket() {
+    secret_key = Conference::instance().getSecretKey();
+}
 
 void ClientSocket::init(const std::string &receiver_ip, const int receiver_port) {
     socket_handle_ = socket(AF_INET, SOCK_DGRAM, 0);
@@ -32,7 +34,11 @@ void ClientSocket::destroy() {
     close(socket_handle_);
 }
 
-void ClientSocket::sendPacket(const std::vector<unsigned char> &data) const {
+void ClientSocket::sendPacket(std::vector<unsigned char> data) const {
+
+    // Ecrypt the packet
+    Cipher::xor_crypt(secret_key, data);
+
     int result = sendto(socket_handle_, data.data(), data.size(), 0,
            const_cast<sockaddr *>(
                reinterpret_cast<const sockaddr *>(&server_addr_)),
@@ -86,6 +92,9 @@ std::vector<unsigned char> ClientSocket::getPacket() const {
     if (num_bytes > 0) {
         data.insert(data.end(), &buffer_[0], &buffer_[num_bytes]);
     }
+
+    // Decrypt the packet
+    Cipher::xor_crypt(secret_key, data);
 
     return data;
 }

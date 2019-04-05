@@ -20,7 +20,7 @@ class ClientSocket {
     ClientSocket();
     void init(const std::string &receiver_ip, const int receiver_port);
     void destroy();
-    void sendPacket(std::vector<unsigned char> data) const;
+    void sendPacket(std::vector<unsigned char> data);
     std::vector<unsigned char> getPacket() const;
 
    private:

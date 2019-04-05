@@ -205,11 +205,6 @@ void AudioStreamService::upStreamingThread() {
                 audio_service.Pa_onxRun();
             }
 
-			// Pa_WriteStream(audio_service.out_stream,
-			// 				audio_service.in_sampleBlock, AudioStreamService::FRAMES_PER_BUFFER);
-            // if (audio_service.err && CHECK_UNDERFLOW) {
-            //     audio_service.Pa_onxRun();
-            // }
 
             std::vector<unsigned char> data(
                 audio_service.in_sampleBlock,
@@ -225,6 +220,9 @@ void AudioStreamService::upStreamingThread() {
 void AudioStreamService::downStreamingThread() {
 
     ClientSocket socket;
+    AudioFrameProtocolData protocol_data;
+    AudioStreamService &audio_service = AudioStreamService::instance();
+
     // Get up port
     int port = Conference::instance().getAudioDownPort();
     // Server ip addresss
@@ -232,9 +230,9 @@ void AudioStreamService::downStreamingThread() {
     // Init a socket to the server
     socket.init(ip_address, port);
 
-    AudioFrameProtocolData protocol_data;
-
-    AudioStreamService &audio_service = AudioStreamService::instance();
+    // Send stream request message
+    socket.sendPacket(protocol_data.packageStreamRequestMessage());
+    
 
     for (;;) {
         AudioStreamService &streaming_service = AudioStreamService::instance();

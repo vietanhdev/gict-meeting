@@ -38,6 +38,11 @@ https://linuxize.com/post/how-to-install-opencv-on-ubuntu-18-04/
 sudo apt-get install libsdl2-dev
 ```
 
+- Install portaudio
+```
+sudo apt install portaudio19-dev
+```
+
 #### Compile and Run
 
 - Compile

@@ -83,12 +83,13 @@ void AudioStreamService::sendAudio(unsigned char source_client_id, const std::ve
     for (int i = 0; i < conference.participants.size(); ++i) {
 
         // Send audio to client if connected
-        // if (conference.participants[i].isConnectedAudio() && conference.participants[i].getClientId() != source_client_id) {
         if (conference.participants[i].isConnectedAudio()) {
-            std::vector<unsigned char> message = protocol_data.packageConferenceAudioFrame(conference.participants[i].getClientId(), data);
-            socket->sendPackage(conference.participants[i].getClientAudioAddress(), message);
+            if (conference.participants[i].getClientId() != source_client_id || DEV_ECHO_AUDIO) {
+                std::vector<unsigned char> message = protocol_data.packageConferenceAudioFrame(conference.participants[i].getClientId(), data);
+                socket->sendPackage(conference.participants[i].getClientAudioAddress(), message);
 
-        }
+            }
+        } 
 
     }
 }

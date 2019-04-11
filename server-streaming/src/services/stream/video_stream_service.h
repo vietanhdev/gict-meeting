@@ -10,6 +10,7 @@
 #include "conference.h"
 #include "video_frame_protocol.h"
 #include "server_socket.h"
+#include "dev.h"
 
 
 #include "timer.h"

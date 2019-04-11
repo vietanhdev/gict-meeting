@@ -10,7 +10,7 @@
 #include "conference.h"
 #include "audio_frame_protocol.h"
 #include "server_socket.h"
-
+#include "dev.h"
 
 class AudioStreamService {
 

@@ -29,7 +29,7 @@ const bool ServerSocket::bindSocketToListen() const {
              sizeof(socket_addr));
     if (bind_status < 0) {
         std::cerr << "Binding failed. Could not bind the socket." << std::endl;
-        return false;
+        // return false;
     }
     return true;
 }

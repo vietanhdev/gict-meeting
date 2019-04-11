@@ -14,4 +14,7 @@
 - Implement quality control.
     => Server/client dựa vào Image sequence id để xác định xem có bị mất frame không, frame có bị xếp sai thứ tự không, có bị chậm trong quá trình nhận frame không, để chỉnh lại chất lượng hình muốn nhận (xem slide về chất lượng hình).
 
-- Implement AccessDenied message (see slides)
+- Implement AccessDenied message (see slides).
+
+- Implement config server. 
+    => Thiết kế server để sinh file cấu hình và chạy stream server. Server này sẽ cung cấp giao diện cho admin để quản lý các conference và giao diện cho client để tải file cấu hình.

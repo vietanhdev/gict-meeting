@@ -38,5 +38,11 @@ make
 
 - Run
 ```
-./StreamServer
+./StreamServer <config-file>
 ```
+
+- Example config file at [./example-conf.yaml](example-conf.yaml)
+
+### NOTE:
+
+- Modify `src/dev.h` for development settings.

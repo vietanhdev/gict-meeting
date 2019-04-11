@@ -8,3 +8,5 @@
 
 - Desktop Application: [desktop-app folder](server-config/)
 
+- TODO: [docs/TODO.md](docs/TODO.md)
+

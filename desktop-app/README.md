@@ -59,6 +59,8 @@ make
 ./VideoConf
 ```
 
+- Choose "Join A Conference" and pick a configure file at `./data/example-conf*`.
+
 ## III. REFERENCES / CITE
 
 - In this project, we use code from:

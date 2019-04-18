@@ -1,0 +1,6 @@
+[submodule "desktop-app/src/yaml_cpp"]
+	path = desktop-app/src/yaml_cpp
+	url = https://github.com/jbeder/yaml-cpp
+[submodule "server-streaming/src/yaml_cpp"]
+	path = server-streaming/src/yaml_cpp
+	url = https://github.com/jbeder/yaml-cpp

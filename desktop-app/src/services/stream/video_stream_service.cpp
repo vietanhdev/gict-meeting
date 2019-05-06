@@ -3,10 +3,28 @@
 
 VideoStreamService::VideoStreamService() {}
 
+
+// Set camera path (maybe a http URL)
+void VideoStreamService::setCameraPath(const std::string& path) {
+    this->use_camera_path = true;
+    this->camera_path = path;
+}
+
 void VideoStreamService::upStreamingThread() {
 
     ClientSocket socket;
-    VideoCapture video_capture(false, cv::Size(640, 480));
+    std::shared_ptr<VideoCapture> video_capture;
+
+    std::cout << "Use camera path: " << VideoStreamService::instance().use_camera_path << std::endl;
+
+    if (VideoStreamService::instance().use_camera_path) {
+        std::cout << "Setting up camera path: " << VideoStreamService::instance().camera_path << std::endl;
+        video_capture = std::make_shared<VideoCapture>(false, cv::Size(640, 480), VideoStreamService::instance().camera_path);
+    } else {
+        video_capture = std::make_shared<VideoCapture>(false, cv::Size(640, 480), -1);
+    }
+
+
     VideoFrameProtocolData protocol_data;
 
     // Get up port
@@ -43,9 +61,9 @@ void VideoStreamService::upStreamingThread() {
         }
 
         if (new_streaming_status) {
-            cv::Mat image = video_capture.getFrameFromCamera().getImage();
+            cv::Mat image = video_capture->getFrameFromCamera().getImage();
             if (image.empty()) {
-                std::cerr << "Could not get image from camera" << std::endl;
+                // std::cerr << "Could not get image from camera" << std::endl;
                 continue;
             }
 

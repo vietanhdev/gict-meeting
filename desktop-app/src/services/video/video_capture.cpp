@@ -6,12 +6,18 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
-VideoCapture::VideoCapture(const bool show_video, cv::Size image_size)
-    : show_video_(show_video), image_size(image_size), capture_(cv::VideoCapture(-1)) {}
+VideoCapture::VideoCapture(const bool show_video, cv::Size image_size, int camera_index)
+    : show_video_(show_video), image_size(image_size), capture_(cv::VideoCapture(camera_index)) {
+}
+
+VideoCapture::VideoCapture(const bool show_video, cv::Size image_size, const std::string & camera_path)
+    : show_video_(show_video), image_size(image_size), capture_(cv::VideoCapture(camera_path)) {
+    std::cout << "Stream from path: " << camera_path << std::endl;
+}
 
 VideoFrame VideoCapture::getFrameFromCamera() {
     if (!capture_.isOpened()) {
-        std::cerr << "Could not get frame. Camera not available." << std::endl;
+        // std::cerr << "Could not get frame. Camera not available." << std::endl;
         return VideoFrame();
     }
     cv::Mat image;

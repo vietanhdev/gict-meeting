@@ -50,8 +50,16 @@ class VideoStreamService: public QObject {
         std::atomic<bool> flip_cam = true;
 
     public:
+        // Use a string as camera address
+        bool use_camera_path = false;
+        std::string camera_path;
+
+    public:
         bool isStreaming();
         void setStreaming(bool streaming);
+
+        // Set camera path (maybe a http URL)
+        void setCameraPath(const std::string& path);
 
     private:
         VideoStreamService(); // Disallow instantiation outside of the class.

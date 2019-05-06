@@ -20,7 +20,8 @@ class VideoCapture {
     //
     // Specify whether or not the video being sent is displayed in a window, and
     // the scale = (0, 1] which will affect the size of the data.
-    VideoCapture(const bool show_video, cv::Size image_size);
+    VideoCapture(const bool show_video, cv::Size image_size, int camera_index);
+    VideoCapture(const bool show_video, cv::Size image_size, const std::string & camera_path);
 
     cv::Mat resizeKeepAspectRatio(const cv::Mat &input, const cv::Size &dstSize, const cv::Scalar &bgcolor);
 

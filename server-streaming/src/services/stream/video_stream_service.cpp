@@ -1,5 +1,5 @@
-
 #include "video_stream_service.h"
+#include "opencv2/imgproc/imgproc.hpp"
 
 VideoStreamService::VideoStreamService() {}
 
@@ -87,20 +87,47 @@ void VideoStreamService::videoDownServiceSending() {
             continue;
         }
       
+        // Send to participant i
         for (int i = 0; i < conference.participants.size(); ++i) {
 
             // Send video to client if connected
             if (conference.participants[i].isConnectedImage()) {
 
+                // List of images of all other participants
+                std::vector<cv::Mat> images;
+
+                // Send images from participant j
                 for (int j = 0; j < conference.participants.size(); ++j) {
 
                     if (j != i || DEV_ECHO_IMAGE) {
-                        std::vector<unsigned char> message = protocol_data.packageData(conference.participants[j].getClientId(), conference.participants[j].getImage());
-                        socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                        // Push the image into the list of images
+                        cv::Mat image = conference.participants[j].getImage();
+
+                        if (image.size().width != 0) // Not sure why there is an empty image
+                            images.push_back(image);
                     }
-                    
                 }
 
+                if (images.size() > 0) {
+                    // Combine all images
+                    cv::Mat combinedImage;
+
+                    cv::Size size(images[0].size().width / images.size(), images[0].size().height / images.size());
+                    cv::Mat resizedImg;
+
+                    for (int i = 0; i < images.size(); i++) {
+                        cv::resize(images[i], resizedImg, size);
+
+                        if (i == 0)
+                            combinedImage = resizedImg;
+                        else
+                            hconcat(combinedImage, resizedImg, combinedImage);
+                    }
+
+                    // Return the combined image
+                    std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage);
+                    socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                }
             }
 
         }

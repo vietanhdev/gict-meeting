@@ -108,21 +108,18 @@ void VideoStreamService::videoDownServiceSending() {
                     }
                 }
 
-                if (images.size() > 0) {
+                if (images.size() >= 2) {
                     // Combine all images
                     cv::Mat combinedImage;
 
                     cv::Size size(images[0].size().width / images.size(), images[0].size().height / images.size());
                     cv::Mat resizedImg;
+                    cv::Mat img0;
+                    cv::Mat img1;
 
-                    for (int i = 0; i < images.size(); i++) {
-                        cv::resize(images[i], resizedImg, size);
-
-                        if (i == 0)
-                            combinedImage = resizedImg;
-                        else
-                            hconcat(combinedImage, resizedImg, combinedImage);
-                    }
+                    cv::resize(images[0], img0, size);
+                    cv::resize(images[1], img1, size);
+                    hconcat(img0, img1, combinedImage);
 
                     // Return the combined image
                     std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage);

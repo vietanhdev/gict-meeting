@@ -108,23 +108,47 @@ void VideoStreamService::videoDownServiceSending() {
                     }
                 }
 
-                if (images.size() >= 2) {
-                    // Combine all images
-                    cv::Mat combinedImage;
+                std::cout << "Sizes: " << images.size() << std::endl;
+                if (images.size() == 0) continue;
 
-                    cv::Size size(images[0].size().width / images.size(), images[0].size().height / images.size());
-                    cv::Mat resizedImg;
-                    cv::Mat img0;
-                    cv::Mat img1;
+                // Return maximum of 4 images, so we will resize them in half
+                cv::Size size(images[0].size().width / 2, images[0].size().height / 2);
 
-                    cv::resize(images[0], img0, size);
-                    cv::resize(images[1], img1, size);
-                    hconcat(img0, img1, combinedImage);
+                // Combine all images
+                cv::Mat combinedImage;
+                cv::Mat img0;
+                cv::Mat img1;
 
-                    // Return the combined image
-                    std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage);
-                    socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                switch(images.size()) {
+                    case 1:
+                        combinedImage = images[0];
+                        break;
+                    case 2:
+                        cv::resize(images[0], img0, size);
+                        cv::resize(images[1], img1, size);
+                        hconcat(img0, img1, combinedImage);
+                        break;
+                    case 3:
+                        cv::resize(images[0], img0, size);
+                        cv::resize(images[1], img1, size);
+                        hconcat(img0, img1, combinedImage);
+                        cv::resize(images[2], img0, size);
+                        vconcat(combinedImage, img0, combinedImage);
+                        break;
+                    default: // case >= 4
+                        cv::resize(images[0], img0, size);
+                        cv::resize(images[1], img1, size);
+                        hconcat(img0, img1, combinedImage);
+                        cv::resize(images[2], img0, size);
+                        cv::resize(images[3], img1, size);
+                        hconcat(img0, img1, img0);
+                        vconcat(combinedImage, img0, combinedImage);
+                        break;
                 }
+
+                // Return the combined image
+                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage);
+                socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
             }
 
         }

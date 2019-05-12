@@ -133,7 +133,8 @@ void VideoStreamService::videoDownServiceSending() {
                         cv::resize(images[1], img1, size);
                         hconcat(img0, img1, combinedImage);
                         cv::resize(images[2], img0, size);
-                        vconcat(combinedImage, img0, combinedImage);
+                        hconcat(img0, img0, img1);
+                        vconcat(combinedImage, img1, combinedImage);
                         break;
                     default: // case >= 4
                         cv::resize(images[0], img0, size);

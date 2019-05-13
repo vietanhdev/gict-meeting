@@ -52,8 +52,7 @@ class AudioStreamService: public QObject {
         char *out_sampleBlock;
         PaStream *in_stream = NULL;
         PaStream *out_stream = NULL;
-        
-       
+        PaStream* out_streams[4];
 
        void Pa_onError();
        void Pa_onxRun();

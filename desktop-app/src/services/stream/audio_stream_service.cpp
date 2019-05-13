@@ -294,13 +294,21 @@ void AudioStreamService::downStreamingThread() {
 
             std::vector<unsigned char> payload = protocol_data.unpackPayload(data);
 
+            // Select audio out stream
+            int clientID = (int) data[1];
+            
+            if (clientID >= 4) clientID = 3;
+            else if (clientID <= 0) clientID = 0;
+            else clientID -= 1;
+
 			if (payload.empty()) continue;
 
 			// std::cout << "Received size = " << payload.size() << std::endl;
 			// std::cout << "Receive content:" << static_cast<int>(payload[30]) << std::endl;
 
 			audio_service.err =
-			Pa_WriteStream(audio_service.out_stream,
+			// Pa_WriteStream(audio_service.out_stream,
+			Pa_WriteStream(audio_service.out_streams[clientID],
 							payload.data(), AudioStreamService::FRAMES_PER_BUFFER);
             if (audio_service.err && CHECK_UNDERFLOW) {
                 audio_service.Pa_onxRun();

@@ -74,7 +74,7 @@ void AudioStreamService::audioDownServiceListening() {
 
 }
 
-
+// Send audio from source_client_id to all other participants
 void AudioStreamService::sendAudio(unsigned char source_client_id, const std::vector<unsigned char> &data) {
     Conference &conference = Conference::instance();
     std::shared_ptr<ServerSocket> socket = AudioStreamService::instance().getAudioDownSocket();
@@ -85,7 +85,7 @@ void AudioStreamService::sendAudio(unsigned char source_client_id, const std::ve
         // Send audio to client if connected
         if (conference.participants[i].isConnectedAudio()) {
             if (conference.participants[i].getClientId() != source_client_id || DEV_ECHO_AUDIO) {
-                std::vector<unsigned char> message = protocol_data.packageConferenceAudioFrame(conference.participants[i].getClientId(), data);
+                std::vector<unsigned char> message = protocol_data.packageConferenceAudioFrame((char) source_client_id, data);
                 socket->sendPackage(conference.participants[i].getClientAudioAddress(), message);
 
             }

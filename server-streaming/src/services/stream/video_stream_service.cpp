@@ -108,7 +108,6 @@ void VideoStreamService::videoDownServiceSending() {
                     }
                 }
 
-                std::cout << "Sizes: " << images.size() << std::endl;
                 if (images.size() == 0) continue;
 
                 // Return maximum of 4 images, so we will resize them in half

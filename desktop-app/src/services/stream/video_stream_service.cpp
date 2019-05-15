@@ -34,6 +34,9 @@ void VideoStreamService::upStreamingThread() {
     // Init a socket to the server
     socket.init(ip_address, port);
 
+    // Frame sequence ID
+    int frameSeqID = 0;
+
     for (;;) {
         VideoStreamService &stream_service = VideoStreamService::instance();
         bool streaming = stream_service.isStreaming();
@@ -74,7 +77,11 @@ void VideoStreamService::upStreamingThread() {
 
             // Check time to ensure keep sending in prefered fps
             if (Timer::calcTimePassed(stream_service.last_image_up_time) > 1000 / stream_service.frame_up_fps ) {
-                socket.sendPacket(protocol_data.packageClientFrame(image));
+                // Increment the frame sequence ID
+                frameSeqID++;
+                if (frameSeqID > 60000) frameSeqID = -1;
+
+                socket.sendPacket(protocol_data.packageClientFrame(image, frameSeqID));
                 stream_service.last_image_up_time = Timer::getCurrentTime();
             }
 

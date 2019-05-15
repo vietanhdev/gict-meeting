@@ -12,7 +12,7 @@
 
 class VideoFrameProtocolData {
    public: 
-    std::vector<unsigned char> packageClientFrame(const cv::Mat & img) const;
+    std::vector<unsigned char> packageClientFrame(const cv::Mat & img, int frameSeqID) const;
     std::vector<unsigned char> packageStreamRequestMessage() const;
 
     // Return true if unpack successfully

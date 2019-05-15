@@ -9,7 +9,7 @@ std::vector<unsigned char> VideoFrameProtocolData::packageData() const {
 }
 
 
-std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char client_id, const cv::Mat & img) const {
+std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char client_id, const cv::Mat & img, int frameSeqID) const {
 
     VideoFrame video_frame(img);
 
@@ -17,7 +17,16 @@ std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char cli
 
     // 14 dummy bytes
     // May be used in the future for frame data
-    for (int i = 0; i < 14; ++i) {
+    for (int i = 0; i < 8; ++i) {
+        message.insert(message.begin(), 0);
+    }
+
+    // 2 bytes frame sequence ID
+    message.insert(message.begin(), frameSeqID & 0xFF);
+    message.insert(message.begin(), (frameSeqID >> 8) & 0xFF); 
+
+    // 4 dummy bytes for auth
+    for (int i = 0; i < 4; i++) {
         message.insert(message.begin(), 0);
     }
 

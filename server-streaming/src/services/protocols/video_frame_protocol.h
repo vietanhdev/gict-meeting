@@ -14,7 +14,7 @@
 class VideoFrameProtocolData : public ProtocolData {
    public:
     std::vector<unsigned char> packageData() const override;
-    std::vector<unsigned char> packageData(unsigned char client_id, const cv::Mat & img) const;
+    std::vector<unsigned char> packageData(unsigned char client_id, const cv::Mat & img, int frameSeqID) const;
 
     // Return true if unpack successfully
     // Otherwise return false

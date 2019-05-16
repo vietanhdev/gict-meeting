@@ -74,6 +74,8 @@ class Conference {
 
         std::vector<Participant>& getParticipants() {return participants;}
 
+        int frameSeqID = 0;
+        std::vector< std::vector<unsigned char> > frameQueue;
 };
 
 

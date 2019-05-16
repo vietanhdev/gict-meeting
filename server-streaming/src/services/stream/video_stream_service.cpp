@@ -80,9 +80,6 @@ void VideoStreamService::videoDownServiceSending() {
     VideoStreamService &stream_service = VideoStreamService::instance();
     VideoFrameProtocolData protocol_data;
 
-    // Combined frame sequence ID
-    int frameSeqID = 0;
-
     while (true) {
 
         // Check time to ensure keep sending in prefered fps
@@ -151,11 +148,11 @@ void VideoStreamService::videoDownServiceSending() {
                 }
 
                 // Increment frame seq ID
-                frameSeqID++;
-                if (frameSeqID > 60000) frameSeqID = 0;
+                conference.frameSeqID++;
+                if (conference.frameSeqID > 60000) conference.frameSeqID = 0;
 
                 // Return the combined image
-                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage, frameSeqID);
+                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage);
                 socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
             }
 

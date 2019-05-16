@@ -2,7 +2,7 @@
 
 #include <vector>
 
-std::vector<unsigned char> VideoFrameProtocolData::packageClientFrame(const cv::Mat & img, int frameSeqID) const {
+std::vector<unsigned char> VideoFrameProtocolData::packageClientFrame(const cv::Mat & img) const {
 
     VideoFrame video_frame(img);
 
@@ -15,8 +15,10 @@ std::vector<unsigned char> VideoFrameProtocolData::packageClientFrame(const cv::
     }
     
     // 2 bytes frame sequence ID
-    message.insert(message.begin(), frameSeqID & 0xFF);
-    message.insert(message.begin(), (frameSeqID >> 8) & 0xFF); 
+    message.insert(message.begin(), Conference::instance().frameSeqID & 0xFF);
+    message.insert(message.begin(), (Conference::instance().frameSeqID >> 8) & 0xFF); 
+
+    std::cout << "Frame ID: " << Conference::instance().frameSeqID << std::endl;
 
     // 4 bytes auth key
     int n = Conference::instance().getClientAuthKey();
@@ -77,7 +79,7 @@ cv::Mat VideoFrameProtocolData::unpackConferenceFrame( const std::vector<unsigne
         std::cout << "Wrong message from server" << std::endl;
         return frame;
     }
-
+    
     // Extract frame data
     std::vector<unsigned char>::const_iterator first = raw_bytes.begin() + 16;
     std::vector<unsigned char>::const_iterator last = raw_bytes.end();

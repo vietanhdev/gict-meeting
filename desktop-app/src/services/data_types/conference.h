@@ -93,6 +93,9 @@ class Conference {
 
         void addParticipant(Participant p);
 
+        int frameSeqID = 0;
+        std::vector< std::vector<unsigned char> > frameQueue;
+
 
 };
 

@@ -134,6 +134,13 @@ void VideoStreamService::downStreamingThread() {
                 continue;
             }
 
+            Conference::instance().enqueueFrame(data);
+            data = Conference::instance().dequeueFrame();
+
+            if (data.empty()) {
+                continue;
+            }
+
             cv::Mat img = protocol_data.unpackConferenceFrame(data);
 
             if (img.empty()) {

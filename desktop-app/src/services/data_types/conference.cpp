@@ -122,3 +122,51 @@ cv::Mat Conference::getClientCamFrame() {
 void Conference::addParticipant(Participant p) {
     this->participants.push_back(p);
 }
+
+void Conference::enqueueFrame(std::vector<unsigned char> newFrame) {
+    // If the queue is full, discard the new frame
+    if (Conference::instance().frameQueue.size() >= 5) return;
+    else if (Conference::instance().frameQueue.size() == 0) Conference::instance().frameQueue.push_back(newFrame);
+    else {
+        bool inserted = false;
+
+        if ((int)(newFrame[6]) == 0 && (int)(Conference::instance().frameQueue[0][6]) == 255) {
+            // Special insert, when 2 frame seq bits has reached 255
+            Conference::instance().frameQueue.push_back(newFrame);
+        } else {
+            for (auto it = Conference::instance().frameQueue.begin(); it != Conference::instance().frameQueue.end(); ++it) {
+                if ( (int)( (*it)[6] ) == (int)( newFrame[6] )) {
+                    if ( (int)( (*it)[7] ) > (int)( newFrame[7] )) {
+                        Conference::instance().frameQueue.insert(it, newFrame);
+                        inserted = true;
+                        break;
+                    }
+                } else if ( (int)( (*it)[6] ) > (int)( newFrame[6] )) {
+                    Conference::instance().frameQueue.insert(it, newFrame);
+                    inserted = true;
+                    break;
+                }
+            }
+
+            if (!inserted) {
+                Conference::instance().frameQueue.push_back(newFrame);
+            }
+        }
+    }
+}
+
+std::vector<unsigned char> Conference::dequeueFrame() {
+    std::vector<unsigned char> firstFrame;
+
+    if (Conference::instance().frameQueue.size() > 0) {
+        firstFrame = Conference::instance().frameQueue[0];
+
+        // If the queue has only 1 image, don't delete it
+        if (Conference::instance().frameQueue.size() > 1) {
+            Conference::instance().frameQueue.erase(Conference::instance().frameQueue.begin());
+        }
+
+    }
+
+    return firstFrame;
+}

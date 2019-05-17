@@ -96,6 +96,8 @@ class Conference {
         int frameSeqID = 0;
         std::vector< std::vector<unsigned char> > frameQueue;
 
+        void enqueueFrame(std::vector<unsigned char> newFrame);
+        std::vector<unsigned char> dequeueFrame();
 
 };
 

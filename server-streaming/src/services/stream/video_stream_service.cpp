@@ -118,6 +118,8 @@ void VideoStreamService::videoDownServiceSending() {
                 cv::Mat combinedImage;
                 cv::Mat img0;
                 cv::Mat img1;
+                // Empty black image
+                cv::Mat blankImg;
 
                 switch(images.size()) {
                     case 1:
@@ -133,7 +135,12 @@ void VideoStreamService::videoDownServiceSending() {
                         cv::resize(images[1], img1, size);
                         hconcat(img0, img1, combinedImage);
                         cv::resize(images[2], img0, size);
-                        hconcat(img0, img0, img1);
+
+                        // Create a blank image with the same size
+                        blankImg = img0.clone();
+                        blankImg.setTo(cv::Scalar(0, 0, 0)); // Set it to black
+                        hconcat(img0, blankImg, img1);
+
                         vconcat(combinedImage, img1, combinedImage);
                         break;
                     default: // case >= 4

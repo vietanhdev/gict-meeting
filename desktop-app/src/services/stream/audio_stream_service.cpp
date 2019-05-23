@@ -4,7 +4,7 @@
 
 /* const int AudioStreamService::SAMPLE_RATE  = 17932; // Test failure to open with this value. */
 const int AudioStreamService::SAMPLE_RATE  = 8000;
-const int AudioStreamService::FRAMES_PER_BUFFER = 128;
+const int AudioStreamService::FRAMES_PER_BUFFER = 44;
 const int AudioStreamService::NUM_CHANNELS    = 1;
 // const int AudioStreamService::DITHER_FLAG  = paDitherOff;
 const int AudioStreamService::DITHER_FLAG     = 1; /**/
@@ -303,16 +303,21 @@ void AudioStreamService::downStreamingThread() {
 
 			if (payload.empty()) continue;
 
+
+            if ( Conference::instance().getClientId() == data[1]) {
+                // DO nothing!!!
+            } else {
+                audio_service.err =
+                // Pa_WriteStream(audio_service.out_stream,
+                Pa_WriteStream(audio_service.out_stream,
+                                payload.data(), AudioStreamService::FRAMES_PER_BUFFER);
+                if (audio_service.err && CHECK_UNDERFLOW) {
+                    audio_service.Pa_onxRun();
+                }
+            }
+
 			// std::cout << "Received size = " << payload.size() << std::endl;
 			// std::cout << "Receive content:" << static_cast<int>(payload[30]) << std::endl;
-
-			audio_service.err =
-			// Pa_WriteStream(audio_service.out_stream,
-			Pa_WriteStream(audio_service.out_stream,
-							payload.data(), AudioStreamService::FRAMES_PER_BUFFER);
-            if (audio_service.err && CHECK_UNDERFLOW) {
-                audio_service.Pa_onxRun();
-            }
 
         }
     }

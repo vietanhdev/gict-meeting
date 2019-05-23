@@ -223,7 +223,8 @@ void AudioStreamService::downStreamingThread() {
             if (new_streaming_status == true) {  // Start streaming
 
 
-                // Init audio stream
+                // Init audio streams
+
                 streaming_service.outputParameters.device =
                     Pa_GetDefaultOutputDevice(); /* default output device */
                 printf("Output device # %d.\n", streaming_service.outputParameters.device);
@@ -238,19 +239,21 @@ void AudioStreamService::downStreamingThread() {
                 streaming_service.outputParameters.hostApiSpecificStreamInfo = NULL;
 
 
-                streaming_service.err = Pa_OpenStream(&streaming_service.out_stream, NULL, &streaming_service.outputParameters, streaming_service.SAMPLE_RATE,
+                for (int i = 0; i < 4; ++i) {
+                    streaming_service.err = Pa_OpenStream(&(streaming_service.out_streams[i]), NULL, &streaming_service.outputParameters, streaming_service.SAMPLE_RATE,
                                     streaming_service.FRAMES_PER_BUFFER,
                                     paClipOff, /* we won't output out of range samples so
                                                 don't bother clipping them */
                                     NULL,      /* no callback, use blocking API */
                                     NULL);     /* no callback, so no callback userData */
-                if (streaming_service.err != paNoError) {
-                    streaming_service.Pa_onError();
-                }
+                    // if (streaming_service.err != paNoError) {
+                    //     streaming_service.Pa_onError();
+                    // }
 
-                streaming_service.err = Pa_StartStream(streaming_service.out_stream);
-                if (streaming_service.err != paNoError) {
-                    streaming_service.Pa_onError();
+                    // streaming_service.err = Pa_StartStream(streaming_service.out_stream);
+                    // if (streaming_service.err != paNoError) {
+                    //     streaming_service.Pa_onError();
+                    // }
                 }
 
                 // Get up port

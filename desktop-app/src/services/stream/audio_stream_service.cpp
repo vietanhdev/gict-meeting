@@ -4,7 +4,7 @@
 
 /* const int AudioStreamService::SAMPLE_RATE  = 17932; // Test failure to open with this value. */
 const int AudioStreamService::SAMPLE_RATE  = 8000;
-const int AudioStreamService::FRAMES_PER_BUFFER = 128;
+const int AudioStreamService::FRAMES_PER_BUFFER = 44;
 const int AudioStreamService::NUM_CHANNELS    = 1;
 // const int AudioStreamService::DITHER_FLAG  = paDitherOff;
 const int AudioStreamService::DITHER_FLAG     = 1; /**/
@@ -60,7 +60,12 @@ AudioStreamService::~AudioStreamService() {
     if (audio_service.err != paNoError) {
         audio_service.Pa_onError();
     }
-    audio_service.err = Pa_StopStream(audio_service.out_stream);
+
+    // audio_service.err = Pa_StopStream(audio_service.out_stream);
+    for (int i = 0; i < 4; i++) {
+        audio_service.err = Pa_StopStream(audio_service.out_streams[i]);
+    }
+
     if (audio_service.err != paNoError) {
         audio_service.Pa_onError();
     }
@@ -75,10 +80,19 @@ void AudioStreamService::Pa_onError() {
         Pa_CloseStream(in_stream);
     }
     free(in_sampleBlock);
-    if (out_stream) {
-        Pa_AbortStream(out_stream);
-        Pa_CloseStream(out_stream);
+
+    // if (out_stream) {
+        // Pa_AbortStream(out_stream);
+        // Pa_CloseStream(out_stream);
+    // }
+
+    for (int i = 0; i < 4; i++) {
+        if (out_streams[i]) {
+            Pa_AbortStream(out_streams[i]);
+            Pa_CloseStream(out_streams[i]);
+        }
     }
+
     free(out_sampleBlock);
     Pa_Terminate();
     fprintf(stderr, "An error occured while using the portaudio stream\n");
@@ -92,10 +106,18 @@ void AudioStreamService::Pa_onxRun() {
         Pa_CloseStream(in_stream);
     }
     free(in_sampleBlock);
-    if (out_stream) {
-        Pa_AbortStream(out_stream);
-        Pa_CloseStream(out_stream);
+
+    // if (out_stream) {
+        // Pa_AbortStream(out_stream);
+        // Pa_CloseStream(out_stream);
+    // }
+    for (int i = 0; i < 4; i++) {
+        if (out_streams[i]) {
+            Pa_AbortStream(out_streams[i]);
+            Pa_CloseStream(out_streams[i]);
+        }
     }
+
     free(out_sampleBlock);
     Pa_Terminate();
     if (err & paInputOverflow) fprintf(stderr, "Input Overflow.\n");
@@ -238,19 +260,35 @@ void AudioStreamService::downStreamingThread() {
                 streaming_service.outputParameters.hostApiSpecificStreamInfo = NULL;
 
 
-                streaming_service.err = Pa_OpenStream(&streaming_service.out_stream, NULL, &streaming_service.outputParameters, streaming_service.SAMPLE_RATE,
-                                    streaming_service.FRAMES_PER_BUFFER,
-                                    paClipOff, /* we won't output out of range samples so
-                                                don't bother clipping them */
-                                    NULL,      /* no callback, use blocking API */
-                                    NULL);     /* no callback, so no callback userData */
+                // streaming_service.err = Pa_OpenStream(&streaming_service.out_stream, NULL, &streaming_service.outputParameters, streaming_service.SAMPLE_RATE,
+                                    // streaming_service.FRAMES_PER_BUFFER,
+                                    // paClipOff, /* we won't output out of range samples so
+                                                // don't bother clipping them */
+                                    // NULL,      /* no callback, use blocking API */
+                                    // NULL);     /* no callback, so no callback userData */
+                for (int i = 0; i < 4; i++) {
+                    streaming_service.err = Pa_OpenStream(&streaming_service.out_streams[i], NULL, &streaming_service.outputParameters, streaming_service.SAMPLE_RATE,
+                                        streaming_service.FRAMES_PER_BUFFER,
+                                        paClipOff, /* we won't output out of range samples so
+                                                    don't bother clipping them */
+                                        NULL,      /* no callback, use blocking API */
+                                        NULL);     /* no callback, so no callback userData */
+                    
+                }
+
                 if (streaming_service.err != paNoError) {
                     streaming_service.Pa_onError();
                 }
 
-                streaming_service.err = Pa_StartStream(streaming_service.out_stream);
-                if (streaming_service.err != paNoError) {
-                    streaming_service.Pa_onError();
+                // streaming_service.err = Pa_StartStream(streaming_service.out_stream);
+                // if (streaming_service.err != paNoError) {
+                    // streaming_service.Pa_onError();
+                // }
+                for (int i = 0; i < 4; i++) {
+                    streaming_service.err = Pa_StartStream(streaming_service.out_streams[i]);
+                    if (streaming_service.err != paNoError) {
+                        streaming_service.Pa_onError();
+                    }
                 }
 
                 // Get up port
@@ -274,7 +312,11 @@ void AudioStreamService::downStreamingThread() {
                 // Destroy socket connection to the server
                 socket.destroy();
 
-                audio_service.err = Pa_StopStream(audio_service.out_stream);
+                for (int i = 0; i < 4; i++) {
+                    audio_service.err = Pa_StopStream(audio_service.out_streams[i]);
+                }
+                // audio_service.err = Pa_StopStream(audio_service.out_stream);
+
                 if (audio_service.err != paNoError) {
                     audio_service.Pa_onError();
                 }
@@ -303,16 +345,21 @@ void AudioStreamService::downStreamingThread() {
 
 			if (payload.empty()) continue;
 
+
+            if ( Conference::instance().getClientId() == data[1]) {
+                // DO nothing!!!
+            } else {
+                audio_service.err =
+                // Pa_WriteStream(audio_service.out_stream,
+                Pa_WriteStream(audio_service.out_streams[clientID],
+                                payload.data(), AudioStreamService::FRAMES_PER_BUFFER);
+                if (audio_service.err && CHECK_UNDERFLOW) {
+                    audio_service.Pa_onxRun();
+                }
+            }
+
 			// std::cout << "Received size = " << payload.size() << std::endl;
 			// std::cout << "Receive content:" << static_cast<int>(payload[30]) << std::endl;
-
-			audio_service.err =
-			// Pa_WriteStream(audio_service.out_stream,
-			Pa_WriteStream(audio_service.out_streams[clientID],
-							payload.data(), AudioStreamService::FRAMES_PER_BUFFER);
-            if (audio_service.err && CHECK_UNDERFLOW) {
-                audio_service.Pa_onxRun();
-            }
 
         }
     }

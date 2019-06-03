@@ -3,7 +3,7 @@
 
 
 // Echo audio to the source client 
-#define DEV_ECHO_AUDIO 1
+#define DEV_ECHO_AUDIO 0
 
 
 // Echo image to the source client

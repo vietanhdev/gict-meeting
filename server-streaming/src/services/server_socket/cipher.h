@@ -8,7 +8,7 @@ class Cipher {
 
     public:
 
-    static void xor_crypt(const std::string &key, std::vector<unsigned char>& data) {
+    static void xorCrypt(const std::string &key, std::vector<unsigned char>& data) {
         for (size_t i = 0; i != data.size(); i++)
             data[i] ^= key[ i % key.size() ];
     }

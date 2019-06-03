@@ -55,7 +55,7 @@ const Packet ServerSocket::getPacket() const {
     }
 
     // Decrypt the packet
-    Cipher::xor_crypt(secret_key, packet.data);
+    Cipher::xorCrypt(secret_key, packet.data);
 
     return packet;
 }
@@ -64,7 +64,7 @@ const Packet ServerSocket::getPacket() const {
 int ServerSocket::sendPackage(sockaddr_in receiver_addr_, std::vector<unsigned char> data) {
 
     // Ecrypt the packet
-    Cipher::xor_crypt(secret_key, data);
+    Cipher::xorCrypt(secret_key, data);
 
     return sendto(socket_handle_, data.data(), data.size(), 0,
         const_cast<sockaddr *>(

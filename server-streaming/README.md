@@ -38,6 +38,7 @@ make
 
 - Run
 ```
+cd bin
 ./StreamServer <config-file>
 ```
 

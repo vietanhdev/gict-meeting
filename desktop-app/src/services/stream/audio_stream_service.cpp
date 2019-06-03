@@ -334,6 +334,13 @@ void AudioStreamService::downStreamingThread() {
                 continue;
             }
 
+            // Check for access denied message
+            if (CommonProtocolData::isAccessDenied(data)) {
+                std::cerr << "Access Denied!." << std::endl;
+                emit AudioStreamService::instance().conferenceAccessDenied();
+            }
+
+
             std::vector<unsigned char> payload = protocol_data.unpackPayload(data);
 
             // Select audio out stream

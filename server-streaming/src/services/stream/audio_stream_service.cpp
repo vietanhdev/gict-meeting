@@ -34,6 +34,8 @@ void AudioStreamService::audioUpService() {
             // std::cout << "Receive:" << payload_data.size() << std::endl;
             // std::cout << "Receive content:" << static_cast<int>(payload_data[30]) << std::endl;
 
+        } else {
+            socket->sendPackage(socket->getPacket().client_addr, CommonProtocolData::getAccessDeniedMessage());
         }
 
     }
@@ -65,6 +67,8 @@ void AudioStreamService::audioDownServiceListening() {
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
                 conference.connectClientAudio(protocol_data.getClientId(), socket->getPacket().client_addr);
+            } else {
+                socket->sendPackage(socket->getPacket().client_addr, CommonProtocolData::getAccessDeniedMessage());
             }
 
         }

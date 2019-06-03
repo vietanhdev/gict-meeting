@@ -16,6 +16,8 @@
 #include <string.h>
 #include "portaudio.h"
 
+
+#include "common_protocol.h"
 #include "audio_frame_protocol.h"
 #include "client_socket.h"
 
@@ -97,8 +99,7 @@ class AudioStreamService: public QObject {
         bool stopStreaming();
 
     signals:
-        void newConferenceFrame();
-        void newClientCamFrame();
+        void conferenceAccessDenied();
 };
 
 #endif

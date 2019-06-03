@@ -91,6 +91,8 @@ add_executable(${PROJECT_NAME}
     "src/services/stream/audio_stream_service.cpp"
     "src/services/protocols/audio_frame_protocol.cpp"
 
+    "src/services/protocols/common_protocol.cpp"
+
     "src/services/client_socket/client_socket.cpp"
 
     "src/services/video/video_capture.cpp"

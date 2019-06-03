@@ -33,6 +33,8 @@ void VideoStreamService::videoUpService() {
             VideoFrame video_frame(payload_data);
             conference.setImage(protocol_data.getClientId(), video_frame.getImage());
             // video_frame.display();
+        } else {
+            socket->sendPackage(socket->getPacket().client_addr, CommonProtocolData::getAccessDeniedMessage());
         }
 
     }
@@ -64,7 +66,11 @@ void VideoStreamService::videoDownServiceListening() {
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
                 conference.connectClientImage(protocol_data.getClientId(), socket->getPacket().client_addr);
+            } else {
+                socket->sendPackage(socket->getPacket().client_addr, CommonProtocolData::getAccessDeniedMessage());
             }
+
+
         }
 
         

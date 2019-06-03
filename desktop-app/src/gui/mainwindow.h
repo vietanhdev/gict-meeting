@@ -54,6 +54,8 @@ private slots:
     void updateClientCamFrame();
     void flipCamCheckboxChanged(int status);
 
+    void conferenceAccessDenied();
+
 private:
     Ui::MainWindow *ui;
 

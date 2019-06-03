@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->clientCamView->scene()->addItem(&client_cam_pixmap);
 
     new_conf_wizard = std::make_shared<NewConferenceWizard>();
+
     // Connect finish signal from Conference Wizard
     connect(new_conf_wizard.get(), SIGNAL(newConferenceJoined()), this, SLOT(startConference()));
 
@@ -33,6 +34,11 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(&VideoStreamService::instance(), SIGNAL(newClientCamFrame()), this,
             SLOT(updateClientCamFrame()));
+
+
+    // Access denied signals from streaming service
+    connect(&AudioStreamService::instance(), SIGNAL(conferenceAccessDenied()), this,
+            SLOT(conferenceAccessDenied()));
 
 
     refreshCams();
@@ -87,6 +93,30 @@ void MainWindow::newConference() {
 
 void MainWindow::startConference() {
     ui->startStopBtn->setText("Leave Conference");
+}
+
+
+// When we receive an access denied message from server ( wrong auth key ),
+// stop the conference and show a notification
+void MainWindow::conferenceAccessDenied() {
+
+    VideoStreamService &ss = VideoStreamService::instance();
+    AudioStreamService &as = AudioStreamService::instance();
+
+    if (ss.isStreaming() || as.isStreaming()) {
+
+        // Stop conference
+        ss.stopStreaming();
+        as.stopStreaming();
+        ui->startStopBtn->setText("Join a Conference");
+
+        // Show message
+        QMessageBox::critical(
+            this, "Error",
+            "Could not join the conference: Access denied!"
+            );
+
+    }
 }
 
 

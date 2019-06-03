@@ -8,6 +8,7 @@
 #include <memory>
 
 #include "conference.h"
+#include "common_protocol.h"
 #include "video_frame_protocol.h"
 #include "server_socket.h"
 #include "dev.h"

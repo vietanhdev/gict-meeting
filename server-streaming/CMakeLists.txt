@@ -54,6 +54,8 @@ add_executable(${PROJECT_NAME}
     "src/services/data_types/conference.cpp"
     "src/services/data_types/participant.cpp"
 
+    "src/services/protocols/common_protocol.cpp"
+
     "src/services/stream/video_stream_service.cpp"
     "src/services/protocols/video_frame_protocol.cpp"
 
@@ -82,3 +84,8 @@ add_subdirectory(src/yaml_cpp)
 
 # link required libs
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS} ${CPP_FS_LIB} ${SDL2_LIBRARIES} yaml-cpp ${CMAKE_THREAD_LIBS_INIT})
+
+# Copy files
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                       ${CMAKE_SOURCE_DIR}/data $<TARGET_FILE_DIR:${PROJECT_NAME}>/data)

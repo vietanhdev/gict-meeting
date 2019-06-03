@@ -24,6 +24,8 @@
 #include "new_conference_wizard.h"
 #include "video_stream_service.h"
 
+#include "video_quality.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -46,6 +48,7 @@ protected:
 
 private slots:
     void cameraSelector_activated();
+    void qualitySelector_activated();
     void showAboutBox();
     void refreshCams();
     void newConference();
@@ -81,6 +84,8 @@ private:
 
 
     std::shared_ptr<NewConferenceWizard> new_conf_wizard;
+
+    void addVideoQualities();
 
 public:
     void setCurrentImage(const cv::Mat & img);

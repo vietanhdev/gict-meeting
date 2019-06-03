@@ -5,6 +5,7 @@
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/highgui/highgui.hpp"
+#include "opencv2/opencv.hpp"
 
 namespace {
 
@@ -44,6 +45,18 @@ std::vector<unsigned char> VideoFrame::getJPEG() const {
     std::vector<unsigned char> data_buffer;
     if (!frame_image_.empty()) {
         cv::imencode(kJPEGExtension, frame_image_, data_buffer, compression_params);
+    }
+    return data_buffer;
+}
+
+std::vector<unsigned char> VideoFrame::getJPEG(int width, int height, int quality) const {
+    const std::vector<int> compression_params = {cv::IMWRITE_JPEG_QUALITY,
+                                                 quality};
+    std::vector<unsigned char> data_buffer;
+    cv::Mat frame;
+    cv::resize(frame_image_, frame, cv::Size(width, height));
+    if (!frame_image_.empty()) {
+        cv::imencode(kJPEGExtension, frame, data_buffer, compression_params);
     }
     return data_buffer;
 }

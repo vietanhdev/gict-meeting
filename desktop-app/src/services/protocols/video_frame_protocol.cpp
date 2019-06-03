@@ -36,15 +36,26 @@ std::vector<unsigned char> VideoFrameProtocolData::packageClientFrame(const cv::
 
 
 
-std::vector<unsigned char> VideoFrameProtocolData::packageStreamRequestMessage() const {
+std::vector<unsigned char> VideoFrameProtocolData::packageStreamRequestMessage(int frame_width, int frame_height, int frame_quality) const {
 
     std::vector<unsigned char> message;
 
-    // 10 dummy bytes
+    // 5 dummy bytes
     // May be used in the future for frame data
     for (int i = 0; i < 10; ++i) {
         message.insert(message.begin(), 0);
     }
+
+    // Frame Quality
+    message.insert(message.begin(), frame_quality & 0xFF);
+
+    // Frame Height
+    message.insert(message.begin(), frame_height & 0xFF);
+    message.insert(message.begin(), (frame_height >> 8) & 0xFF); 
+
+    // Frame Width
+    message.insert(message.begin(), frame_width & 0xFF);
+    message.insert(message.begin(), (frame_width >> 8) & 0xFF); 
 
     // 4 bytes auth key
     int n = Conference::instance().getClientAuthKey();

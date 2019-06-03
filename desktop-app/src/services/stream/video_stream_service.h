@@ -14,6 +14,7 @@
 #include "video_frame_protocol.h"
 #include "client_socket.h"
 #include "video_capture.h"
+#include "video_quality.h"
 
 #include "conference.h"
 
@@ -44,7 +45,10 @@ class VideoStreamService: public QObject {
         // Used to control the up streaming framerate
         Timer::time_point_t last_image_up_time; // Last time we sent image to the server
         float frame_up_fps = 15; // Frame rate of image streaming to the server
-        
+
+        // Requesting video quality (request video from server)
+        int conference_video_quality = VIDEO_QUALITY_640x480_50;
+        Timer::time_point_t last_image_request_time; // Last time we requested image to the server
 
         // Flip image or not. It is applied globally
         std::atomic<bool> flip_cam = true;
@@ -60,6 +64,8 @@ class VideoStreamService: public QObject {
 
         // Set camera path (maybe a http URL)
         void setCameraPath(const std::string& path);
+
+        void setConferenceVideoQuality(int video_quality);
 
     private:
         VideoStreamService(); // Disallow instantiation outside of the class.

@@ -63,9 +63,19 @@ void VideoStreamService::videoDownServiceListening() {
 
             std::cout << "Client requested image stream. Client id = " << static_cast<int>(protocol_data.getClientId()) << std::endl;
 
+
+            std::vector<int> video_quality = VideoFrameProtocolData::getDownStreamQuality(data);
+
+            std::cout << video_quality[0] << " " << video_quality[1] << " " << video_quality[2] << " " << std::endl;
+
+            int frame_width = video_quality[0];
+            int frame_height = video_quality[1];
+            int frame_quality = video_quality[2];
+
+
             // Authentication
             if (conference.checkAuth(protocol_data.getClientId(), protocol_data.getClientAuthKey() )) {
-                conference.connectClientImage(protocol_data.getClientId(), socket->getPacket().client_addr);
+                conference.connectClientImage(protocol_data.getClientId(), socket->getPacket().client_addr, frame_width, frame_height, frame_quality);
             } else {
                 socket->sendPackage(socket->getPacket().client_addr, CommonProtocolData::getAccessDeniedMessage());
             }
@@ -165,7 +175,7 @@ void VideoStreamService::videoDownServiceSending() {
                 if (conference.frameSeqID > 60000) conference.frameSeqID = 0;
 
                 // Return the combined image
-                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage);
+                std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage, conference.participants[i].frame_width, conference.participants[i].frame_height, conference.participants[i].frame_quality);
                 socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
             }
 

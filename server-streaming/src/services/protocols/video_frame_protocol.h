@@ -14,7 +14,7 @@
 class VideoFrameProtocolData : public ProtocolData {
    public:
     std::vector<unsigned char> packageData() const override;
-    std::vector<unsigned char> packageData(unsigned char client_id, const cv::Mat & img) const;
+    std::vector<unsigned char> packageData(unsigned char client_id, const cv::Mat & img, int width, int height, int quality) const;
 
     // Return true if unpack successfully
     // Otherwise return false
@@ -29,6 +29,9 @@ class VideoFrameProtocolData : public ProtocolData {
 
     // Return message of packet
     unsigned char getMessage() const;
+
+    // Get down stream quality
+    static std::vector<int> getDownStreamQuality(const std::vector<unsigned char>& raw_bytes);
 
     const std::vector<unsigned char>& getHeaderData() const;
 

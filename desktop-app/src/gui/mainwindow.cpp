@@ -22,8 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->startStopBtn, SIGNAL(released()), this, SLOT(newConference()));
 
     // Option selector events
-    connect(ui->cameraSelector, SIGNAL(activated(int)), this,
-            SLOT(cameraSelector_activated()));
+    connect(ui->qualitySelector, SIGNAL(activated(int)), this,
+            SLOT(qualitySelector_activated()));
 
     // Flip cam checkbox
     connect(ui->flipCameraCheckBox, SIGNAL(stateChanged(int)), this, SLOT(flipCamCheckboxChanged(int)));
@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     refreshCams();
+    addVideoQualities();
 
     // Init Audio
     SDL_Init(SDL_INIT_AUDIO);
@@ -127,6 +128,15 @@ void MainWindow::cameraSelector_activated() {
             .toInt();
 }
 
+void MainWindow::qualitySelector_activated() {
+    int selected_quality =
+        ui->qualitySelector
+            ->itemData(ui->qualitySelector->currentIndex())
+            .toInt();
+
+    VideoStreamService::instance().setConferenceVideoQuality(selected_quality);
+}
+
 
 void MainWindow::showAboutBox() {
     QMessageBox::about(this, "About Us",
@@ -199,6 +209,39 @@ void MainWindow::refreshCams() {
     if ( index != -1 ) { // -1 for not found
         ui->cameraSelector->setCurrentIndex(index);
     }
+}
+
+
+void MainWindow::addVideoQualities() {
+
+    ui->qualitySelector->clear();
+
+    ui->qualitySelector->addItem(
+    QString::fromUtf8(VIDEO_QUALITY_640x480_50_TEXT),
+    QVariant(VIDEO_QUALITY_640x480_50));
+
+    VideoStreamService::instance().setConferenceVideoQuality(VIDEO_QUALITY_640x480_50);
+
+    ui->qualitySelector->addItem(
+    QString::fromUtf8(VIDEO_QUALITY_640x480_80_TEXT),
+    QVariant(VIDEO_QUALITY_640x480_80));
+
+    ui->qualitySelector->addItem(
+    QString::fromUtf8(VIDEO_QUALITY_640x480_30_TEXT),
+    QVariant(VIDEO_QUALITY_640x480_30));
+
+    ui->qualitySelector->addItem(
+    QString::fromUtf8(VIDEO_QUALITY_320x240_80_TEXT),
+    QVariant(VIDEO_QUALITY_320x240_80));
+
+    ui->qualitySelector->addItem(
+    QString::fromUtf8(VIDEO_QUALITY_320x240_50_TEXT),
+    QVariant(VIDEO_QUALITY_320x240_50));
+
+    ui->qualitySelector->addItem(
+    QString::fromUtf8(VIDEO_QUALITY_320x240_30_TEXT),
+    QVariant(VIDEO_QUALITY_320x240_30));
+
 }
 
 void MainWindow::setCurrentImage(const cv::Mat &img) {

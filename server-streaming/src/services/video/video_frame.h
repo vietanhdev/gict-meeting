@@ -27,6 +27,7 @@ class VideoFrame {
     // Returns the raw byte representation of the given video frame. Singe image
     // compression to JPEG is also handled here to minimize the frame size.
     std::vector<unsigned char> getJPEG() const;
+    std::vector<unsigned char> getJPEG(int width, int height, int quality) const;
 
     cv::Mat getImage();
 

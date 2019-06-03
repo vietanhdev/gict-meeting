@@ -9,11 +9,11 @@ std::vector<unsigned char> VideoFrameProtocolData::packageData() const {
 }
 
 
-std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char client_id, const cv::Mat & img) const {
+std::vector<unsigned char> VideoFrameProtocolData::packageData(unsigned char client_id, const cv::Mat & img, int width, int height, int quality) const {
 
     VideoFrame video_frame(img);
 
-    std::vector<unsigned char> message = video_frame.getJPEG();
+    std::vector<unsigned char> message = video_frame.getJPEG(width, height, quality);
 
     // 14 dummy bytes
     // May be used in the future for frame data
@@ -62,6 +62,19 @@ bool VideoFrameProtocolData::unpackHeader( const std::vector<unsigned char>& raw
     header_data = std::vector<unsigned char>(first, last);
 
     return true;
+}
+
+
+// Get down stream quality
+std::vector<int> VideoFrameProtocolData::getDownStreamQuality(const std::vector<unsigned char>& raw_bytes) {
+    int frame_width = (raw_bytes[6] << 8) + raw_bytes[7];
+    int frame_height = (raw_bytes[8] << 8) + raw_bytes[9];
+    int frame_quality = raw_bytes[10];
+    std::vector<int> data;
+    data.push_back(frame_width);
+    data.push_back(frame_height);
+    data.push_back(frame_quality);
+    return data;
 }
 
 

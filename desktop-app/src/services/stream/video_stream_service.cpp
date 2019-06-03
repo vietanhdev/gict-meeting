@@ -10,6 +10,11 @@ void VideoStreamService::setCameraPath(const std::string& path) {
     this->camera_path = path;
 }
 
+
+void VideoStreamService::setConferenceVideoQuality(int video_quality) {
+    this->conference_video_quality = video_quality;
+}
+
 void VideoStreamService::upStreamingThread() {
 
     ClientSocket socket;
@@ -110,11 +115,6 @@ void VideoStreamService::downStreamingThread() {
                 // Init a socket to the server
                 socket.init(ip_address, port);
 
-                // Send stream request message
-                socket.sendPacket(protocol_data.packageStreamRequestMessage());
-                
-
-                std::cout << "Requesting video streaming from server" << std::endl;
 
             } else { // Stop streaming
 
@@ -128,6 +128,36 @@ void VideoStreamService::downStreamingThread() {
 
         //Streaming
         if (new_streaming_status) {
+
+
+            // Send package request every 2 seconds
+            if (Timer::calcTimePassed(stream_service.last_image_request_time) > 2000) {
+
+                std::cout << Timer::calcTimePassed(stream_service.last_image_request_time) << std::endl;
+
+                // Default
+                int frame_width = 640;
+                int frame_height = 480;
+                int frame_quality = 50;
+
+                switch (stream_service.conference_video_quality) {
+                    case VIDEO_QUALITY_640x480_50: frame_width = 640; frame_height = 480; frame_quality = 50; break;
+                    case VIDEO_QUALITY_640x480_80: frame_width = 640; frame_height = 480; frame_quality = 80; break;
+                    case VIDEO_QUALITY_640x480_30: frame_width = 640; frame_height = 480; frame_quality = 30; break;
+                    case VIDEO_QUALITY_320x240_80: frame_width = 320; frame_height = 240; frame_quality = 80; break;
+                    case VIDEO_QUALITY_320x240_50: frame_width = 320; frame_height = 240; frame_quality = 50; break;
+                    case VIDEO_QUALITY_320x240_30: frame_width = 320; frame_height = 240; frame_quality = 30; break;
+                    default:  frame_width = 320; frame_height = 240; frame_quality = 30;
+                }
+
+                // Send stream request message
+                socket.sendPacket(protocol_data.packageStreamRequestMessage(frame_width, frame_height, frame_quality));
+
+                // Assign time
+                stream_service.last_image_request_time = Timer::getCurrentTime();
+
+            }
+
             std::vector<unsigned char> data = socket.getPacket();
 
             if (data.empty()) {

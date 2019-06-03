@@ -32,6 +32,11 @@ class Participant {
         bool audio_connected = false; // image_connected = true means client have connected to the system and requested audio stream  => client_addr has been set.
 
     public:
+
+        int frame_width = 640;
+        int frame_height = 480;
+        int frame_quality = 50;
+
         Participant(const Participant& p) {
             std::lock_guard<std::mutex> lock(g_mutex);
             this->name = p.name;
@@ -53,9 +58,12 @@ class Participant {
             return auth_key;
         }
 
-        void setClientImageAddress(struct sockaddr_in client_addr) {
+        void setClientImageAddress(struct sockaddr_in client_addr, int frame_width, int frame_height, int frame_quality) {
             std::lock_guard<std::mutex> lock(g_mutex);
             this->client_image_addr = client_addr;
+            this->frame_width = frame_width;
+            this->frame_height = frame_height;
+            this->frame_quality = frame_quality;
             this->image_connected = true;
         }
 

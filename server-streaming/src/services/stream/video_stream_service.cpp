@@ -177,6 +177,14 @@ void VideoStreamService::videoDownServiceSending() {
                 // Return the combined image
                 std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage, conference.participants[i].frame_width, conference.participants[i].frame_height, conference.participants[i].frame_quality);
                 socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+
+                if (images.size() == 2) {
+                    std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage, conference.participants[i].frame_width * 2, conference.participants[i].frame_height, conference.participants[i].frame_quality);
+                    socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                } else {
+                    std::vector<unsigned char> message = protocol_data.packageData(conference.participants[i].getClientId(), combinedImage, conference.participants[i].frame_width, conference.participants[i].frame_height, conference.participants[i].frame_quality);
+                    socket->sendPackage(conference.participants[i].getClientImageAddress(), message);
+                }
             }
 
         }

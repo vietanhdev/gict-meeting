@@ -8,7 +8,7 @@ NOTE: This projects still contains bugs.
 
 - Server - Configuration: [server-config folder](server-config/)
 
-- Server - Streaming: [server-streaming folder](server-config/)
+- Server - Streaming: [server-streaming folder](server-streaming/)
 
-- Desktop Application: [desktop-app folder](server-config/)
+- Desktop Application: [desktop-app folder](desktop-app/)
 
